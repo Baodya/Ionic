@@ -1,0 +1,7 @@
+{
+  "name": "Chat-For-Test",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
