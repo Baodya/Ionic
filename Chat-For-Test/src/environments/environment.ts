@@ -15,7 +15,6 @@ export const environment = {
     appId: '1:112289435790:web:919db8d220f4522075f9df'
   }
 };
-firebase.initializeApp(environment.firebaseConfig);
 
 /*
  * For easier debugging in development mode, you can import the following file
