@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "ionic-chat-c14b2": {
+      "hosting": {
+        "app": [
+          "ionic-chat-c14b2"
+        ]
+      }
+    }
+  }
+}
