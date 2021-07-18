@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChatService, Message} from '../../services/chat.service';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {IonContent} from '@ionic/angular';
 
 @Component({
   selector: 'app-main',
@@ -6,21 +10,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main.page.scss'],
 })
 export class MainPage implements OnInit {
+  @ViewChild(IonContent) content: IonContent;
 
-  public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
-  ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  public messages: Observable<Message[]>;
+  newMsg = '';
+
   public dark = false;
 
-  constructor() { }
+  constructor(private chatService: ChatService, private router: Router) { }
 
   ngOnInit() {
+    this.messages = this.chatService.getChatMessages();
   }
 
+  public sendMessage() {
+    this.chatService.addChatMessage(this.newMsg).then(() => {
+      this.newMsg = '';
+      this.content.scrollToBottom().then();
+    });
+  }
+
+  public signOut() {
+    this.chatService.signOut().then(() => {
+      this.router.navigateByUrl('/', {replaceUrl: true}).then();
+    });
+  }
 }

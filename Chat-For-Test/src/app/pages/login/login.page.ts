@@ -26,42 +26,58 @@ export class LoginPage implements OnInit {
     });
   }
 
-  private async signUp(): Promise<void>{
+  async signUp() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.chatService
+      .signUp(this.credentialForm.value)
+      .then(
+        (user) => {
+          loading.dismiss();
+          this.router.navigateByUrl('/chat', { replaceUrl: true });
+        },
+        async (err) => {
+          loading.dismiss();
+          const alert = await this.alertController.create({
+            header: 'Sign up failed',
+            message: err.message,
+            buttons: ['OK'],
+          });
+
+          await alert.present();
+        }
+      );
+  }
+
+  async signIn() {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.chatService.signUp(this.credentialForm.value).then(user => {
-      loading.dismiss();
-      this.router.navigateByUrl('/main', {replaceUrl: true});
-    }, async err => {
-      await loading.dismiss();
-      const alert = await this.alertController.create({
-        header: 'Sign Up Failed',
-        message: err.message,
-        buttons: ['OK']
-      });
-    });
+    this.chatService
+      .signIn(this.credentialForm.value)
+      .then(
+        (res) => {
+          loading.dismiss();
+          this.router.navigateByUrl('/chat', { replaceUrl: true });
+        },
+        async (err) => {
+          loading.dismiss();
+          const alert = await this.alertController.create({
+            header: ':(',
+            message: err.message,
+            buttons: ['OK'],
+          });
+
+          await alert.present();
+        }
+      );
   }
 
-  private async signIn(): Promise<void>{
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    this.chatService.signUp(this.credentialForm.value).then(
-      (res) => {
-        loading.dismiss();
-        this.router.navigateByUrl('/main', {replaceUrl: true});
-      },
-      async (err) => {
-        await loading.dismiss();
-        const alert = await this.alertController.create({
-          header: ':(',
-          message: err.message,
-          buttons: ['OK']
-        });
-        await alert.present();
-      }
-    );
+  get email() {
+    return this.credentialForm.get('email');
   }
 
+  get password() {
+    return this.credentialForm.get('password');
+  }
 }

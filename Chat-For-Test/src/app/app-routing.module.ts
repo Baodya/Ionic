@@ -4,7 +4,7 @@ import {canActivate, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 
-const redirectLoggedInToChat = () => redirectLoggedInTo(['/folder:id']);
+const redirectLoggedInToChat = () => redirectLoggedInTo(['/main']);
 
 const routes: Routes = [
   {
@@ -16,11 +16,6 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule),
     ...canActivate(redirectLoggedInToChat)
-  },
-  {
-    path: 'folder/:id',
-    loadChildren: () => import('./pages/folder/folder.module').then(m => m.FolderPageModule),
-    ...canActivate(redirectUnauthorizedToLogin)
   },
   {
     path: 'main',
