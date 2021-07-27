@@ -23,7 +23,9 @@ export interface Message {
   providedIn: 'root'
 })
 export class ChatService {
-  currentUser: User = null;
+  public dark = true;
+
+  private currentUser: User = null;
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
     this.afAuth.onAuthStateChanged((user) => {
@@ -71,7 +73,6 @@ export class ChatService {
         return this.afs.collection('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id' }) as Observable<Message[]>;
       }),
       map(messages => {
-        // Get the real name for each user
         for (const m of messages) {
           m.fromName = this.getUserForMsg(m.from, users);
           m.myMsg = this.currentUser.uid === m.from;
@@ -81,7 +82,7 @@ export class ChatService {
     );
   }
 
-  private getUsers() {
+  getUsers() {
     return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
   }
 

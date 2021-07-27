@@ -34,7 +34,7 @@ export class LoginPage implements OnInit {
       .then(
         (user) => {
           loading.dismiss();
-          this.router.navigateByUrl('/chat', { replaceUrl: true });
+          this.router.navigateByUrl('/main', { replaceUrl: true });
         },
         async (err) => {
           loading.dismiss();
@@ -58,7 +58,7 @@ export class LoginPage implements OnInit {
       .then(
         (res) => {
           loading.dismiss();
-          this.router.navigateByUrl('/chat', { replaceUrl: true });
+          this.router.navigateByUrl('/main', { replaceUrl: true });
         },
         async (err) => {
           loading.dismiss();
