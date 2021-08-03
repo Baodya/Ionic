@@ -31,31 +31,23 @@ export class MainPage implements OnInit {
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Option Message',
-      cssClass: 'my-custom-class',
       buttons: [{
-        text: 'Delete',
-        role: 'destructive',
-        icon: 'trash',
+        text: 'Camera',
+        icon: 'camera',
         handler: () => {
-          console.log('Delete clicked');
+          console.log('Camera clicked');
         }
       }, {
-        text: 'Share',
-        icon: 'share',
+        text: 'Voice Message',
+        icon: 'mic',
         handler: () => {
-          console.log('Share clicked');
+          console.log('Voice clicked');
         }
-      }, {
-        text: 'Play (open modal)',
-        icon: 'caret-forward-circle',
+      },{
+        text: 'Location',
+        icon: 'navigate-circle',
         handler: () => {
-          console.log('Play clicked');
-        }
-      }, {
-        text: 'Favorite',
-        icon: 'heart',
-        handler: () => {
-          console.log('Favorite clicked');
+          console.log('Voice clicked');
         }
       }, {
         text: 'Cancel',
