@@ -10,6 +10,7 @@ import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {FileTransfer} from '@ionic-native/file-transfer/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,7 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
     AngularFireAuthModule,
     AngularFirestoreModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, FileTransfer],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

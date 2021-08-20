@@ -4,3 +4,9 @@
   background: var(--ion-color-danger);
   padding: 5px 15px;
 }
+.content{
+  height: 88vh;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+}
