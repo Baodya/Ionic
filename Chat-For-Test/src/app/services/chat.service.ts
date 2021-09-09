@@ -81,8 +81,11 @@ export class ChatService {
       })
     );
   }
+  public deleteMessage(currentMessage): Promise<any> {
+    return this.afs.collection('messages').doc(currentMessage.id).delete();
+  }
 
-  getUsers() {
+  private getUsers() {
     return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
   }
 
@@ -94,4 +97,5 @@ export class ChatService {
     }
     return 'Deleted';
   }
+
 }

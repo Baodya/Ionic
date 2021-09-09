@@ -1,9 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ChatService, Message} from '../../services/chat.service';
-import {Observable} from 'rxjs';
 import {ActionSheetController, IonContent, PopoverController} from '@ionic/angular';
-import {FileTransferService} from '../../services/file-transfer.service';
 import {OptionsComponent} from './components/option-component/options.component';
+import {finalize, tap} from 'rxjs/operators';
+
+// import {PhotoService} from "../../services/photo.service";
 
 @Component({
   selector: 'app-main',
@@ -12,23 +13,23 @@ import {OptionsComponent} from './components/option-component/options.component'
 })
 export class MainPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
-  public messages: Observable<Message[]>;
+  public messages: Message[];
   newMsg = '';
 
   constructor(private chatService: ChatService,
               public actionSheetController: ActionSheetController,
-              private fileTransfer: FileTransferService,
-              public popoverController: PopoverController
-  ) {}
+              public popoverController: PopoverController,
+              // private photoService: PhotoService,
+  ) {
+  }
 
   ngOnInit() {
-    this.messages = this.chatService.getChatMessages();
+    this.getAllMessage();
   }
 
   public sendMessage() {
     this.chatService.addChatMessage(this.newMsg).then(() => {
       this.newMsg = '';
-      this.content.scrollToBottom().then();
     });
   }
 
@@ -65,7 +66,7 @@ export class MainPage implements OnInit {
           text: 'Send File',
           icon: 'document',
           handler: () => {
-            this.fileTransfer.download();
+            // this.fileTransfer.download();
             console.log('Send File clicked');
           }
         },
@@ -83,12 +84,48 @@ export class MainPage implements OnInit {
             console.log('Cancel clicked');
           }
         }
-        ]
+      ]
     });
     await actionSheet.present();
 
     const {role} = await actionSheet.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
   }
+
+  private getAllMessage(): void {
+    //FIxMe: fix this GAVNO code
+    // Sorry Oleg)
+    this.chatService.getChatMessages()
+      .subscribe(msg => {
+        if (!this.messages) {
+          this.messages = msg;
+        } else {
+          msg.forEach(upadatedItem => {
+            if (upadatedItem.createdAt !== null) {
+              const messageFound = this.messages.filter(oldItem => upadatedItem.id === oldItem.id);
+              if (!messageFound.length) {
+                this.messages.push(upadatedItem);
+              }
+            }
+          });
+        }
+        setTimeout(() => {
+          this.content.scrollToBottom(500);
+        }, 200);
+      });
+  }
+
+  // public async addNewToGallery() {
+  //   // Take a photo
+  //   const capturedPhoto = await Camera.getPhoto({
+  //     resultType: CameraResultType.Uri, // file-based data; provides best performance
+  //     source: CameraSource.Camera, // automatically take a new photo with the camera
+  //     quality: 100 // highest quality (0 to 100)
+  //   });
+  //
+  //   // Save the picture and add it to photo collection
+  //   const savedImageFile = await this.photoService.savePicture(capturedPhoto);
+  //   this.photos.unshift(savedImageFile);
+  // }
 
 }

@@ -2,10 +2,9 @@
 <app-header></app-header>
 
 <ion-content class="ion-padding">
-
-  <ion-grid>
-    <ion-row *ngFor="let message of messages | async">
-      <ion-col (click)="presentOption($event, message)" size="9" class="message"
+  <ion-grid *ngIf="messages" >
+    <ion-row  *ngFor="let message of messages" >
+      <ion-col  size="9" class="message" (click)="presentOption($event, message)"
                [offset]="message.myMsg ? 3 : 0"
                [ngClass]="{ 'my-message': message.myMsg, 'other-message': !message.myMsg }">
         <b>{{ message.fromName }}</b><br>
@@ -15,7 +14,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
 </ion-content>
 
 <ion-footer>

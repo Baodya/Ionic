@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PopoverController} from '@ionic/angular';
+import {ChatService} from '../../../../services/chat.service';
 
 @Component({
   selector: 'app-option-component',
@@ -8,9 +9,11 @@ import {PopoverController} from '@ionic/angular';
 })
 export class OptionsComponent implements OnInit {
   public currentMessage;
-  constructor(public popoverController: PopoverController) {
+  private componentProps;
+  constructor(public popoverController: PopoverController, private chatService: ChatService) {
     this.popoverController.getTop().then(data => {
       this.currentMessage = data.componentProps.message;
+      this.componentProps = data;
     });
   }
 
@@ -19,7 +22,12 @@ export class OptionsComponent implements OnInit {
   }
 
   public delete(): void {
-    console.log(this.currentMessage);
+      this.popoverController.dismiss(this.chatService.deleteMessage(this.currentMessage)).then(() => {
+        this.chatService.getChatMessages();
+      });
+
+      //toDo: продовжи з поверненя нового списку після видалення повідомлення))
+    // і знай ти красавчик
   }
 
   edit() {
