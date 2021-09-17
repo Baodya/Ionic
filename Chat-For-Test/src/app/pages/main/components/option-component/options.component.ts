@@ -22,15 +22,11 @@ export class OptionsComponent implements OnInit {
   }
 
   public delete(): void {
-      this.popoverController.dismiss(this.chatService.deleteMessage(this.currentMessage)).then(() => {
-        this.chatService.getChatMessages();
-      });
-
-      //toDo: продовжи з поверненя нового списку після видалення повідомлення))
-    // і знай ти красавчик
+    this.chatService.deleteMessage(this.currentMessage).then();
+      this.popoverController.dismiss(this.currentMessage, 'delete').then();
   }
 
   edit() {
-
+    this.popoverController.dismiss(this.currentMessage, 'edit').then();
   }
 }

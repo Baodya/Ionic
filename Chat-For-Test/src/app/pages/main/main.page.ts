@@ -14,7 +14,8 @@ import {finalize, tap} from 'rxjs/operators';
 export class MainPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
   public messages: Message[];
-  newMsg = '';
+  public newMsg = '';
+  public editMode = false;
 
   constructor(private chatService: ChatService,
               public actionSheetController: ActionSheetController,
@@ -42,6 +43,23 @@ export class MainPage implements OnInit {
       translucent: true,
     });
     await popover.present();
+
+    await popover.onDidDismiss().then(data => {
+      switch (data.role){
+        case 'delete':
+          this.deleteMessageAndUpdate(data);
+          break;
+        case 'edit':
+          console.log('edit');
+          this.editMode = true;
+          this.newMsg = data.data.msg;
+          this.editMessage(data.data);
+
+          break;
+        default:
+          console.log('default');
+      }
+    });
   }
 
   async presentActionSheet() {
@@ -115,6 +133,16 @@ export class MainPage implements OnInit {
       });
   }
 
+  private deleteMessageAndUpdate(deleteMessage): void {
+    this.chatService.getChatMessages()
+      .subscribe(() => {
+        const index = this.messages.indexOf(deleteMessage.data);
+        if (index > -1) {
+          this.messages.splice(index, 1);
+        }
+      });
+  }
+
   // public async addNewToGallery() {
   //   // Take a photo
   //   const capturedPhoto = await Camera.getPhoto({
@@ -128,4 +156,8 @@ export class MainPage implements OnInit {
   //   this.photos.unshift(savedImageFile);
   // }
 
+
+  private editMessage(editMessage: Message) {
+
+  }
 }
