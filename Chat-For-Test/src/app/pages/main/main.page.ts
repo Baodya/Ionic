@@ -3,6 +3,7 @@ import {ChatService, Message} from '../../services/chat.service';
 import {ActionSheetController, IonContent, PopoverController} from '@ionic/angular';
 import {OptionsComponent} from './components/option-component/options.component';
 import {finalize, tap} from 'rxjs/operators';
+import {PhotoService} from '../../services/photo.service';
 
 // import {PhotoService} from "../../services/photo.service";
 
@@ -16,11 +17,13 @@ export class MainPage implements OnInit {
   public messages: Message[];
   public newMsg = '';
   public editMode = false;
+  private updateMessage: Message;
+  private photo = '';
 
   constructor(private chatService: ChatService,
               public actionSheetController: ActionSheetController,
               public popoverController: PopoverController,
-              // private photoService: PhotoService,
+              private photoService: PhotoService,
   ) {
   }
 
@@ -29,7 +32,7 @@ export class MainPage implements OnInit {
   }
 
   public sendMessage() {
-    this.chatService.addChatMessage(this.newMsg).then(() => {
+    this.chatService.addChatMessage(this.newMsg, this.photo).then(() => {
       this.newMsg = '';
     });
   }
@@ -50,11 +53,9 @@ export class MainPage implements OnInit {
           this.deleteMessageAndUpdate(data);
           break;
         case 'edit':
-          console.log('edit');
           this.editMode = true;
           this.newMsg = data.data.msg;
-          this.editMessage(data.data);
-
+          this.updateMessage = data.data;
           break;
         default:
           console.log('default');
@@ -71,6 +72,7 @@ export class MainPage implements OnInit {
           icon: 'camera',
           handler: () => {
             console.log('Camera clicked');
+            this.addPhotoToGallery();
           }
         },
         {
@@ -98,9 +100,6 @@ export class MainPage implements OnInit {
           text: 'Cancel',
           icon: 'close',
           role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
         }
       ]
     });
@@ -157,7 +156,19 @@ export class MainPage implements OnInit {
   // }
 
 
-  private editMessage(editMessage: Message) {
+  private editMessage() {
+    this.updateMessage.msg = this.newMsg;
+    this.chatService.updateMessage(this.updateMessage).finally(() => {
+      this.newMsg = '';
+      this.editMode = false;
+    });
+  }
 
+  private addPhotoToGallery() {
+    this.photoService.addNewToGallery().then(data => {
+      this.photo = data.data;
+      this.sendMessage();
+      console.log(data)
+    });
   }
 }

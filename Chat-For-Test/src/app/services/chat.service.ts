@@ -15,6 +15,7 @@ export interface Message {
   id: string;
   from: string;
   msg: string;
+  photo: string;
   fromName: string;
   myMsg: boolean;
 }
@@ -57,8 +58,9 @@ export class ChatService {
     return this.afAuth.signOut();
   }
 
-  addChatMessage(msg) {
+  addChatMessage(msg, photo) {
     return this.afs.collection('messages').add({
+      photo,
       msg,
       from: this.currentUser.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -96,6 +98,16 @@ export class ChatService {
       }
     }
     return 'Deleted';
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public updateMessage(newMessage) {
+    const data = Object.assign({
+      createdAt: newMessage.createdAt,
+      from: newMessage.from,
+      msg: newMessage.msg
+    });
+    return this.afs.collection('messages').doc(newMessage.id).update(data);
   }
 
 }

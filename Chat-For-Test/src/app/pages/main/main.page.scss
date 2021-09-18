@@ -42,6 +42,13 @@ ion-menu-button {
   border-radius: 10px !important;
   margin-bottom: 4px !important;
   white-space: pre-wrap;
+
+  .image{
+    height: 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 }
 
 .my-message {
