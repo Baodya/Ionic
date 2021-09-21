@@ -12,7 +12,7 @@
           <span>
           {{ message.msg }}
         </span>
-          <div *ngIf="message.photo" class="image" style="background-image: url({{message.photo}})"></div>
+          <div (click)="openPhoto($event ,message.photo)" *ngIf="message.photo" class="image" style="background-image: url({{message.photo}})"></div>
           <div class="time ion-text-right"><br>{{ message.createdAt?.toMillis() | date:'short' }}</div>
         </ion-col>
       </ion-row>
@@ -46,6 +46,11 @@
           <ion-button *ngIf="editMode" expand="block" fill="clear" color="primary" [disabled]="newMsg === ''"
                       class="msg-btn" (click)="editMessage()">
             <ion-icon name="send" slot="icon-only"></ion-icon>
+          </ion-button>
+
+          <ion-button *ngIf="editMode" expand="block" fill="clear" color="primary"
+                      class="msg-btn" (click)="exitEditMode()">
+            <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
           </ion-button>
 
         </ion-col>

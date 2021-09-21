@@ -2,10 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ChatService, Message} from '../../services/chat.service';
 import {ActionSheetController, IonContent, PopoverController} from '@ionic/angular';
 import {OptionsComponent} from './components/option-component/options.component';
-import {finalize, tap} from 'rxjs/operators';
 import {PhotoService} from '../../services/photo.service';
+import {ViewPhotoComponent} from './components/view-photo/view-photo.component';
 
-// import {PhotoService} from "../../services/photo.service";
 
 @Component({
   selector: 'app-main',
@@ -41,7 +40,6 @@ export class MainPage implements OnInit {
     const popover = await this.popoverController.create({
       component: OptionsComponent,
       componentProps: {message},
-      cssClass: 'my-custom-class',
       event: ev,
       translucent: true,
     });
@@ -71,7 +69,6 @@ export class MainPage implements OnInit {
           text: 'Camera',
           icon: 'camera',
           handler: () => {
-            console.log('Camera clicked');
             this.addPhotoToGallery();
           }
         },
@@ -109,6 +106,19 @@ export class MainPage implements OnInit {
     console.log('onDidDismiss resolved with role', role);
   }
 
+  public editMessage(): void {
+    this.updateMessage.msg = this.newMsg;
+    this.chatService.updateMessage(this.updateMessage).finally(() => {
+      this.newMsg = '';
+      this.editMode = false;
+    });
+  }
+
+  public exitEditMode(): void {
+    this.newMsg = '';
+    this.editMode = false;
+  }
+
   private getAllMessage(): void {
     //FIxMe: fix this GAVNO code
     // Sorry Oleg)
@@ -142,33 +152,24 @@ export class MainPage implements OnInit {
       });
   }
 
-  // public async addNewToGallery() {
-  //   // Take a photo
-  //   const capturedPhoto = await Camera.getPhoto({
-  //     resultType: CameraResultType.Uri, // file-based data; provides best performance
-  //     source: CameraSource.Camera, // automatically take a new photo with the camera
-  //     quality: 100 // highest quality (0 to 100)
-  //   });
-  //
-  //   // Save the picture and add it to photo collection
-  //   const savedImageFile = await this.photoService.savePicture(capturedPhoto);
-  //   this.photos.unshift(savedImageFile);
-  // }
-
-
-  private editMessage() {
-    this.updateMessage.msg = this.newMsg;
-    this.chatService.updateMessage(this.updateMessage).finally(() => {
-      this.newMsg = '';
-      this.editMode = false;
-    });
-  }
-
   private addPhotoToGallery() {
     this.photoService.addNewToGallery().then(data => {
       this.photo = data.data;
       this.sendMessage();
-      console.log(data)
     });
+  }
+
+  public async openPhoto(ev: any,  photo: string): Promise<void> {
+    ev.stopImmediatePropagation();
+
+    const popover = await this.popoverController.create({
+      component: ViewPhotoComponent,
+      componentProps: {photo},
+      cssClass: 'my-custom-class',
+      translucent: true,
+    });
+    await popover.present();
+
+    await popover.onDidDismiss();
   }
 }

@@ -9,11 +9,9 @@ import {ChatService} from '../../../../services/chat.service';
 })
 export class OptionsComponent implements OnInit {
   public currentMessage;
-  private componentProps;
   constructor(public popoverController: PopoverController, private chatService: ChatService) {
     this.popoverController.getTop().then(data => {
       this.currentMessage = data.componentProps.message;
-      this.componentProps = data;
     });
   }
 
