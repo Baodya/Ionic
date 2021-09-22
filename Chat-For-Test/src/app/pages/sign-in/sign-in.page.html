@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Sign In</ion-title>
+    <ion-button strong="true" slot="end" (click)="signUp()" color="warning">
+      Sign up
+      <ion-icon name="arrow-forward-circle-sharp"></ion-icon>
+    </ion-button>
+
   </ion-toolbar>
 </ion-header>
 
@@ -35,7 +40,6 @@
     </form>
 
     <div >
-      <ion-button (click)="signUp()" strong="true" expand="block" color="warning">Sign up</ion-button>
       <ion-button (click)="signIn()" strong="true" expand="block" color="success">Sign in</ion-button>
     </div>
   </div>

@@ -3,24 +3,28 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {ChatService} from '../../services/chat.service';
 import {Router} from '@angular/router';
+import {PhotoService} from '../../services/photo.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  templateUrl: './sign-up.page.html',
+  styleUrls: ['./sign-up.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class SignUpPage implements OnInit {
   public credentialForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
     private loadingController: LoadingController,
     private chatService: ChatService,
-    private router: Router
+    private router: Router,
+    private photoService: PhotoService,
   ) { }
 
   ngOnInit() {
     this.credentialForm = this.fb.group({
+      photo: [''],
+      nickname: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
@@ -49,35 +53,25 @@ export class LoginPage implements OnInit {
       );
   }
 
-  async signIn() {
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    this.chatService
-      .signIn(this.credentialForm.value)
-      .then(
-        (res) => {
-          loading.dismiss();
-          this.router.navigateByUrl('/main', { replaceUrl: true });
-        },
-        async (err) => {
-          loading.dismiss();
-          const alert = await this.alertController.create({
-            header: ':(',
-            message: err.message,
-            buttons: ['OK'],
-          });
-
-          await alert.present();
-        }
-      );
-  }
-
   get email() {
     return this.credentialForm.get('email');
   }
 
   get password() {
     return this.credentialForm.get('password');
+  }
+
+  get nickname() {
+    return this.credentialForm.get('nickname');
+  }
+
+  signIn() {
+    this.router.navigate(['/sign-in']);
+  }
+
+  addPhotoForAvatar() {
+    this.photoService.addNewToGallery().then(data => {
+      this.credentialForm.get('photo').setValue(data.data);
+    });
   }
 }

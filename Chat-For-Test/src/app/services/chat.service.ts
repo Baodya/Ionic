@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 export interface User {
   uid: string;
   email: string;
+  photo?: string;
+  nickname?: string;
 }
 
 export interface Message {
@@ -34,7 +36,7 @@ export class ChatService {
     });
   }
 
-  async signUp({ email, password }): Promise<any> {
+  async signUp({ email, password, nickname, photo }): Promise<any> {
     const credential = await this.afAuth.createUserWithEmailAndPassword(
       email,
       password
@@ -47,6 +49,8 @@ export class ChatService {
     ).set({
       uid,
       email: credential.user.email,
+      nickname,
+      photo,
     });
   }
 
@@ -87,14 +91,14 @@ export class ChatService {
     return this.afs.collection('messages').doc(currentMessage.id).delete();
   }
 
-  private getUsers() {
+  getUsers() {
     return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
   }
 
   private getUserForMsg(msgFromId, users: User[]): string {
     for (const usr of users) {
       if (usr.uid === msgFromId) {
-        return usr.email;
+        return usr.nickname;
       }
     }
     return 'Deleted';

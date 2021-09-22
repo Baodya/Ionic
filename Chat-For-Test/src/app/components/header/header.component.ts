@@ -16,12 +16,23 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getUsers();
+  }
 
   public signOut() {
     this.chatService.signOut().then(() => {
       this.router.navigateByUrl('/', {replaceUrl: true}).then();
     });
+  }
+
+  private getUsers() {
+    this.chatService.getUsers().subscribe({
+      next: (user) => {
+        this.currentUser = user.find(( oneUser) => oneUser.uid === this.currentUser.uid);
+      }
+    });
+
   }
 
 }

@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sign Up</ion-title>
+    <ion-button strong="true" (click)="signIn()" slot="end" color="success">
+      <ion-icon name="arrow-back-circle-sharp"></ion-icon>
+       Sign in
+    </ion-button>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content">
+    <form [formGroup]="credentialForm">
+      <div class="field">
+        <ion-item>
+          <ion-input
+            placeholder="Nickname"
+            type="text"
+            formControlName="nickname"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="(nickname.dirty || nickname.touched) && nickname.errors" class="errors">
+          <span *ngIf="nickname.errors?.required"> Nickname is required </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <ion-item>
+          <ion-input
+            placeholder="Email  address"
+            formControlName="email"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="(email.dirty || email.touched) && email.errors" class="errors">
+          <span *ngIf="email.errors?.required"> Email is required</span>
+          <span *ngIf="email.errors?.email"> Email is invalid</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <ion-item>
+          <ion-input
+            placeholder="Password"
+            type="password"
+            formControlName="password"
+            clearInput="true">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
+          <span *ngIf="password.errors?.required"> Password is required </span>
+          <span *ngIf="password.errors?.minlength"> Password needs to be 6 characters</span>
+        </div>
+      </div>
+
+      <ion-fab vertical="center" horizontal="center" slot="fixed">
+        <ion-fab-button color="tertiary">
+          <ion-icon name="image-outline"></ion-icon>
+        </ion-fab-button>
+
+
+        <ion-fab-list side="start">
+          <ion-fab-button color="success">
+            <ion-icon name="cloud-download-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+        <ion-fab-list side="end">
+          <ion-fab-button color="warning" (click)="addPhotoForAvatar()">
+            <ion-icon name="camera-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
+
+
+    </form>
+
+    <div>
+      <ion-button strong="true" expand="block" (click)="signUp()" color="warning">Sign up</ion-button>
+    </div>
+  </div>
+</ion-content>

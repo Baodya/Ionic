@@ -4,6 +4,7 @@ import {ActionSheetController, IonContent, PopoverController} from '@ionic/angul
 import {OptionsComponent} from './components/option-component/options.component';
 import {PhotoService} from '../../services/photo.service';
 import {ViewPhotoComponent} from './components/view-photo/view-photo.component';
+import {FileService} from '../../services/file.service';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class MainPage implements OnInit {
               public actionSheetController: ActionSheetController,
               public popoverController: PopoverController,
               private photoService: PhotoService,
+              private fileService: FileService,
   ) {
   }
 
@@ -85,6 +87,7 @@ export class MainPage implements OnInit {
           handler: () => {
             // this.fileTransfer.download();
             console.log('Send File clicked');
+            this.fileService.fileChooser();
           }
         },
         {
@@ -117,6 +120,20 @@ export class MainPage implements OnInit {
   public exitEditMode(): void {
     this.newMsg = '';
     this.editMode = false;
+  }
+
+  public async openPhoto(ev: any,  photo: string): Promise<void> {
+    ev.stopImmediatePropagation();
+
+    const popover = await this.popoverController.create({
+      component: ViewPhotoComponent,
+      componentProps: {photo},
+      cssClass: 'my-custom-class',
+      translucent: true,
+    });
+    await popover.present();
+
+    await popover.onDidDismiss();
   }
 
   private getAllMessage(): void {
@@ -157,19 +174,5 @@ export class MainPage implements OnInit {
       this.photo = data.data;
       this.sendMessage();
     });
-  }
-
-  public async openPhoto(ev: any,  photo: string): Promise<void> {
-    ev.stopImmediatePropagation();
-
-    const popover = await this.popoverController.create({
-      component: ViewPhotoComponent,
-      componentProps: {photo},
-      cssClass: 'my-custom-class',
-      translucent: true,
-    });
-    await popover.present();
-
-    await popover.onDidDismiss();
   }
 }

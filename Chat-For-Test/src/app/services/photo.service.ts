@@ -18,7 +18,6 @@ export class PhotoService {
       width: 300,
       allowEditing: true,
     });
-    console.log(capturedPhoto)
 
     return await this.savePicture(capturedPhoto);
     // return capturedPhoto;
