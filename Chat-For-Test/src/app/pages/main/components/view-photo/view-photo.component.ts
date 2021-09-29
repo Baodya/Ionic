@@ -10,7 +10,6 @@ export class ViewPhotoComponent implements OnInit {
   public currentPhoto;
   constructor(public popoverController: PopoverController) {
     this.popoverController.getTop().then(data => {
-      console.log(data.componentProps.photo);
       this.currentPhoto = data.componentProps.photo;
     });
   }

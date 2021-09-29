@@ -104,8 +104,7 @@ export class ChatService {
     return 'Deleted';
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  public updateMessage(newMessage) {
+  public updateMessage(newMessage): Promise<void> {
     const data = Object.assign({
       createdAt: newMessage.createdAt,
       from: newMessage.from,
