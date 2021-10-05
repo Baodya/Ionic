@@ -78,7 +78,6 @@ export class MainPage implements OnInit {
           text: 'Voice Message',
           icon: 'mic',
           handler: () => {
-            this.fileService.choseSecretFile();
           }
         },
         {
@@ -86,7 +85,7 @@ export class MainPage implements OnInit {
           icon: 'document',
           handler: () => {
             console.log('Send File clicked');
-            this.fileService.writeSecretFile();
+            this.fileService.fileSelected();
           }
         },
         {
@@ -94,7 +93,6 @@ export class MainPage implements OnInit {
           icon: 'navigate-circle',
           handler: () => {
             console.log('Voice clicked');
-            this.fileService.readSecretFile();
           }
         }, {
           text: 'Cancel',

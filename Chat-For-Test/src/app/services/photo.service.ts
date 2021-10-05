@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Camera, CameraPhoto, CameraResultType, CameraSource} from '@capacitor/camera';
-import {AngularFireStorage} from '@angular/fire/storage';
 import {Directory} from '@capacitor/filesystem';
 
 @Injectable({
@@ -8,7 +7,7 @@ import {Directory} from '@capacitor/filesystem';
 })
 export class PhotoService {
 
-  constructor(private storage: AngularFireStorage) {}
+  constructor() {}
 
   public async addNewToGallery() {
     const capturedPhoto = await Camera.getPhoto({
@@ -20,7 +19,6 @@ export class PhotoService {
     });
 
     return await this.savePicture(capturedPhoto);
-    // return capturedPhoto;
   }
 
 

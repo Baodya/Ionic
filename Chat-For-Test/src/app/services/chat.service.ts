@@ -28,7 +28,7 @@ export interface Message {
 export class ChatService {
   public dark = true;
 
-  private currentUser: User = null;
+  public currentUser: User = null;
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
     this.afAuth.onAuthStateChanged((user) => {

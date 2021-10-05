@@ -1,58 +1,38 @@
 import {Injectable} from '@angular/core';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import firebase from 'firebase/app';
+import {ChatService} from './chat.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-  constructor() {}
+  private storageRef: firebase.storage.Reference;
 
-  async choseSecretFile()  {
-    await Filesystem.appendFile({
-      path: 'secrets/text.txt',
-      data: 'This is a test',
-      directory: Directory.Documents,
-      encoding: Encoding.UTF8,
+  constructor(private chatService: ChatService) {
+    this.storageRef = firebase.storage().ref();
+  }
+
+
+  async fileSelected() {
+    let fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.addEventListener('change', event => {
+      const target = event.target as HTMLInputElement;
+      const selectedFile = target.files[0];
+      this.loadDocuments(selectedFile);
+      fileInput = null;
     });
+    fileInput.click();
   };
 
-
-  async writeSecretFile()  {
-    await Filesystem.writeFile({
-      path: 'secrets/text.txt',
-      data: 'This is a test',
-      directory: Directory.Documents,
-      encoding: Encoding.UTF8,
-    });
-  };
-
-  async readSecretFile() {
-    const contents = await Filesystem.readFile({
-      path: 'secrets/text.txt',
-      directory: Directory.Documents,
-      encoding: Encoding.UTF8,
+  async loadDocuments(selectedFile: File) {
+    firebase.storage()
+      .ref()
+      .child(`${this.chatService.currentUser.uid}/${selectedFile.name}`)
+      .put(selectedFile).then((snapshot) => {
+      console.log(snapshot);
     });
 
-    console.log('secrets:', contents);
   };
-
-  async deleteSecretFile() {
-    await Filesystem.deleteFile({
-      path: 'secrets/text.txt',
-      directory: Directory.Documents,
-    });
-  };
-
-  async readFilePath() {
-    // Here's an example of reading a file with a full file path. Use this to
-    // read binary data (base64 encoded) from plugins that return File URIs, such as
-    // the Camera.
-    const contents = await Filesystem.readFile({
-      path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Documents/text.txt'
-    });
-
-    console.log('data:', contents);
-  };
-
 
 }
