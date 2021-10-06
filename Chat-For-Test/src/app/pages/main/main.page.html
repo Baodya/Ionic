@@ -4,14 +4,23 @@
   <ion-content class="ion-padding">
     <ion-grid *ngIf="messages">
       <ion-row *ngFor="let message of messages">
+        <!--present Option-->
         <ion-col size="9" class="message" (click)="presentOption($event, message)"
                  [offset]="message.myMsg ? 3 : 0"
                  [ngClass]="{ 'my-message': message.myMsg, 'other-message': !message.myMsg }">
-          <b>{{ message.fromName }}</b><br>
-
+          <b>{{ message.fromName }}</b>
+          <br>
+          <!--icon-->
+          <ion-button fill="clear"  color="light" *ngIf="message.file" (click)="downloadFile(message, $event)">
+            <ion-icon name="document"></ion-icon>
+            {{message.file}}
+          </ion-button>
+          <!--message-->
+          <br>
           <span>
-          {{ message.msg }}
-        </span>
+            {{ message.msg }}
+          </span>
+          <!--image-->
           <div (click)="openPhoto($event ,message.photo)" *ngIf="message.photo" class="image" style="background-image: url({{message.photo}})"></div>
           <div class="time ion-text-right"><br>{{ message.createdAt?.toMillis() | date:'short' }}</div>
         </ion-col>

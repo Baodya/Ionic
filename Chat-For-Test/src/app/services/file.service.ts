@@ -13,7 +13,14 @@ export class FileService {
   }
 
 
-  async fileSelected() {
+  public deleteFile(currentMessage): void{
+    firebase.storage()
+      .ref()
+      .child(`${currentMessage.from}/${currentMessage.file}`)
+      .delete().then();
+  }
+
+  public fileSelected() {
     let fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.addEventListener('change', event => {
@@ -25,14 +32,10 @@ export class FileService {
     fileInput.click();
   };
 
-  async loadDocuments(selectedFile: File) {
+  private loadDocuments(selectedFile: File): void {
     firebase.storage()
       .ref()
       .child(`${this.chatService.currentUser.uid}/${selectedFile.name}`)
-      .put(selectedFile).then((snapshot) => {
-      console.log(snapshot);
-    });
-
+      .put(selectedFile).then(() => this.chatService.addChatMessage('', '', selectedFile.name));
   };
-
 }

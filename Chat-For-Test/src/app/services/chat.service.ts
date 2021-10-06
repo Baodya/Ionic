@@ -20,6 +20,7 @@ export interface Message {
   photo: string;
   fromName: string;
   myMsg: boolean;
+  file: boolean;
 }
 
 @Injectable({
@@ -33,7 +34,7 @@ export class ChatService {
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
     this.afAuth.onAuthStateChanged((user) => {
       this.currentUser = user;
-    });
+    }).then();
   }
 
   async signUp({ email, password, nickname, photo }): Promise<any> {
@@ -62,8 +63,9 @@ export class ChatService {
     return this.afAuth.signOut();
   }
 
-  addChatMessage(msg, photo) {
+  addChatMessage(msg, photo, file?: string) {
     return this.afs.collection('messages').add({
+      file,
       photo,
       msg,
       from: this.currentUser.uid,
@@ -91,11 +93,11 @@ export class ChatService {
     return this.afs.collection('messages').doc(currentMessage.id).delete();
   }
 
-  getUsers() {
+  public getUsers() {
     return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
   }
 
-  private getUserForMsg(msgFromId, users: User[]): string {
+  getUserForMsg(msgFromId, users: User[]): string {
     for (const usr of users) {
       if (usr.uid === msgFromId) {
         return usr.nickname;

@@ -69,7 +69,7 @@ export class MainPage implements OnInit {
       buttons: [
         {
           text: 'Camera',
-          icon: 'camera',
+          icon: 'aperture',
           handler: () => {
             this.addPhotoToGallery();
           }
@@ -132,6 +132,12 @@ export class MainPage implements OnInit {
     await popover.present();
 
     await popover.onDidDismiss();
+  }
+
+  public downloadFile(message: Message, event) {
+    event.stopImmediatePropagation();
+    console.log(message.from);
+    console.log(message.file);
   }
 
   private getAllMessage(): void {
