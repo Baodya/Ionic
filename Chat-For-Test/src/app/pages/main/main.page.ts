@@ -5,6 +5,7 @@ import {OptionsComponent} from './components/option-component/options.component'
 import {PhotoService} from '../../services/photo.service';
 import {ViewPhotoComponent} from './components/view-photo/view-photo.component';
 import {FileService} from '../../services/file.service';
+import { ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class MainPage implements OnInit {
   public messages: Message[];
   public newMsg = '';
   public editMode = false;
+  public loadingForFile = false;
   private updateMessage: Message;
   private photo = '';
 
@@ -25,6 +27,7 @@ export class MainPage implements OnInit {
               public popoverController: PopoverController,
               private photoService: PhotoService,
               private fileService: FileService,
+              private toastController: ToastController,
   ) {
   }
 
@@ -136,8 +139,27 @@ export class MainPage implements OnInit {
 
   public downloadFile(message: Message, event) {
     event.stopImmediatePropagation();
-    console.log(message.from);
-    console.log(message.file);
+    this.loadingForFile = true;
+    this.fileService.downloadFile(message).then(data => {
+      console.log(data);
+    })
+      .finally(() => {
+        this.loadingForFile = false;
+        this.showToast('Download Success').then();
+      })
+      .catch((error) => {
+      });
+  }
+
+  async showToast(text: string) {
+    const toast = await this.toastController.create({
+      color: 'primary',
+      duration: 2000,
+      position: 'middle',
+      message: text,
+    });
+
+    await toast.present();
   }
 
   private getAllMessage(): void {

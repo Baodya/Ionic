@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Camera, CameraPhoto, CameraResultType, CameraSource} from '@capacitor/camera';
-import {Directory} from '@capacitor/filesystem';
+import {Directory, Encoding, Filesystem} from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,6 @@ export class PhotoService {
 
     return await this.savePicture(capturedPhoto);
   }
-
 
   private async savePicture(cameraPhoto: CameraPhoto) {
     const base64Data = await this.readAsBase64(cameraPhoto);

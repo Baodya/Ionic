@@ -20,7 +20,7 @@ export interface Message {
   photo: string;
   fromName: string;
   myMsg: boolean;
-  file: boolean;
+  file: string;
 }
 
 @Injectable({
@@ -63,7 +63,7 @@ export class ChatService {
     return this.afAuth.signOut();
   }
 
-  addChatMessage(msg, photo, file?: string) {
+  addChatMessage(msg, photo, file = '') {
     return this.afs.collection('messages').add({
       file,
       photo,

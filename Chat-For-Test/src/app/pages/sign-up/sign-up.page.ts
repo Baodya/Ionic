@@ -4,6 +4,7 @@ import {AlertController, LoadingController} from '@ionic/angular';
 import {ChatService} from '../../services/chat.service';
 import {Router} from '@angular/router';
 import {PhotoService} from '../../services/photo.service';
+import {FileService} from '../../services/file.service';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class SignUpPage implements OnInit {
     private chatService: ChatService,
     private router: Router,
     private photoService: PhotoService,
+    private fileService: FileService,
   ) { }
 
   ngOnInit() {
@@ -73,5 +75,9 @@ export class SignUpPage implements OnInit {
     this.photoService.addNewToGallery().then(data => {
       this.credentialForm.get('photo').setValue(data.data);
     });
+  }
+
+  loadPhotoFromAvatar() {
+    // this.photoService.fileSelectedForAvatar().then(data => console.log(data))
   }
 }

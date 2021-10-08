@@ -10,10 +10,11 @@
                  [ngClass]="{ 'my-message': message.myMsg, 'other-message': !message.myMsg }">
           <b>{{ message.fromName }}</b>
           <br>
-          <!--icon-->
+          <!--document-->
           <ion-button fill="clear"  color="light" *ngIf="message.file" (click)="downloadFile(message, $event)">
             <ion-icon name="document"></ion-icon>
             {{message.file}}
+            <ion-spinner *ngIf="loadingForFile" color="light" name="lines-small"></ion-spinner>
           </ion-button>
           <!--message-->
           <br>

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import firebase from 'firebase/app';
-import {ChatService} from './chat.service';
+import {ChatService, Message} from './chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,14 @@ export class FileService {
     });
     fileInput.click();
   };
+
+  public downloadFile(message: Message): Promise<void> {
+    console.log(`its url => ${message.from} , ${message.file}`);
+
+    return this.storageRef
+      .child(`${message.from}/${message.file}`)
+      .getDownloadURL();
+  }
 
   private loadDocuments(selectedFile: File): void {
     firebase.storage()
