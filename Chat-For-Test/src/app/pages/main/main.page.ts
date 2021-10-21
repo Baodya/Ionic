@@ -140,14 +140,13 @@ export class MainPage implements OnInit {
   public downloadFile(message: Message, event) {
     event.stopImmediatePropagation();
     this.loadingForFile = true;
-    this.fileService.downloadFile(message).then(data => {
-      console.log(data);
-    })
+    this.fileService.downloadFile(message).then(url => this.fileService.downloadFileIntoDevice(url))
       .finally(() => {
         this.loadingForFile = false;
         this.showToast('Download Success').then();
       })
-      .catch((error) => {
+      .catch(() => {
+        this.showToast('Ups something wrong').then();
       });
   }
 
@@ -163,8 +162,6 @@ export class MainPage implements OnInit {
   }
 
   private getAllMessage(): void {
-    //FIxMe: fix this GAVNO code
-    // Sorry Oleg)
     this.chatService.getChatMessages()
       .subscribe(msg => {
         if (!this.messages) {

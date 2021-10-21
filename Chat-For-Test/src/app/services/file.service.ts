@@ -2,13 +2,15 @@ import {Injectable} from '@angular/core';
 import firebase from 'firebase/app';
 import {ChatService, Message} from './chat.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
   private storageRef: firebase.storage.Reference;
 
-  constructor(private chatService: ChatService) {
+  constructor(private chatService: ChatService,
+  ) {
     this.storageRef = firebase.storage().ref();
   }
 
@@ -33,11 +35,17 @@ export class FileService {
   };
 
   public downloadFile(message: Message): Promise<void> {
-    console.log(`its url => ${message.from} , ${message.file}`);
-
-    return this.storageRef
-      .child(`${message.from}/${message.file}`)
+    return firebase.storage()
+      .ref(`${message.from}/${message.file}`)
       .getDownloadURL();
+
+  }
+
+  public downloadFileIntoDevice(urlForDownload) {
+    const a = document.createElement('a');
+    a.href = urlForDownload;
+    a.setAttribute('download', 'test.txt');
+    a.click();
   }
 
   private loadDocuments(selectedFile: File): void {
