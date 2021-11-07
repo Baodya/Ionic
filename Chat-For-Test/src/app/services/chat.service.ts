@@ -11,6 +11,11 @@ export interface User {
   photo?: string;
   nickname?: string;
 }
+export interface VoiceMessage {
+  mimeType: string;
+  recordDataBase64: string;
+  msDuration: number;
+}
 
 export interface Message {
   createdAt: firebase.firestore.FieldValue;
@@ -18,6 +23,7 @@ export interface Message {
   from: string;
   msg: string;
   photo: string;
+  voiceMessage: VoiceMessage;
   fromName: string;
   myMsg: boolean;
   file: string;
@@ -63,11 +69,12 @@ export class ChatService {
     return this.afAuth.signOut();
   }
 
-  addChatMessage(msg, photo, file = '') {
+  addChatMessage(msg, photo, file = '', voiceMessage = '') {
     return this.afs.collection('messages').add({
       file,
       photo,
       msg,
+      voiceMessage,
       from: this.currentUser.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });

@@ -7,6 +7,7 @@ import {MainPage} from './main.page';
 import {HeaderComponent} from '../../components/header/header.component';
 import {OptionsComponent} from './components/option-component/options.component';
 import { ViewPhotoComponent } from './components/view-photo/view-photo.component';
+import {RecordVoiceComponent} from './components/record-voice/record-voice.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { ViewPhotoComponent } from './components/view-photo/view-photo.component
     MainPageRoutingModule,
   ],
   providers: [],
-  declarations: [MainPage, HeaderComponent, OptionsComponent, ViewPhotoComponent]
+  declarations: [MainPage, HeaderComponent, OptionsComponent, ViewPhotoComponent, RecordVoiceComponent]
 })
 export class MainPageModule {}

@@ -11,18 +11,33 @@
           <b>{{ message.fromName }}</b>
           <br>
           <!--document-->
-          <ion-button fill="clear"  color="light" *ngIf="message.file" (click)="downloadFile(message, $event)">
+          <ion-button fill="clear" color="light" *ngIf="message.file" (click)="downloadFile(message, $event)">
             <ion-icon name="document"></ion-icon>
             {{message.file}}
             <ion-spinner *ngIf="loadingForFile" color="light" name="lines-small"></ion-spinner>
           </ion-button>
+          <!--voiceMessage-->
+          <ion-button fill="clear" size="medium" color="light"
+                      *ngIf="message.voiceMessage && listenMessage !== message.id"
+                      (click)="listenVoiceMessage(message, $event)">
+            <ion-icon name="play-circle"></ion-icon>
+            {{message.voiceMessage.msDuration  | date : 'm:s'}}
+          </ion-button>
+
+          <ion-button fill="clear" size="medium" color="light"
+                      *ngIf="message.voiceMessage && listenMessage === message.id"
+                      (click)="pauseVoiceMessage($event)">
+            <ion-icon name="pause-circle"></ion-icon>
+            {{message.voiceMessage.msDuration  | date : 'm:s'}}
+          </ion-button>
           <!--message-->
           <br>
-          <span>
+          <span *ngIf="message.msg">
             {{ message.msg }}
           </span>
           <!--image-->
-          <div (click)="openPhoto($event ,message.photo)" *ngIf="message.photo" class="image" style="background-image: url({{message.photo}})"></div>
+          <div (click)="openPhoto($event ,message.photo)" *ngIf="message.photo" class="image"
+               style="background-image: url({{message.photo}})"></div>
           <div class="time ion-text-right"><br>{{ message.createdAt?.toMillis() | date:'short' }}</div>
         </ion-col>
       </ion-row>
@@ -32,7 +47,7 @@
   <ion-footer>
     <ion-toolbar color="light">
       <ion-row class="ion-align-items-center">
-        <ion-col size="6" >
+        <ion-col size="6">
           <ion-textarea autoGrow="true"
                         class="message-input"
                         rows="1"

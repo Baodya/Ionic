@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ChatService, Message} from '../../services/chat.service';
-import {ActionSheetController, IonContent, PopoverController} from '@ionic/angular';
+import {ActionSheetController, IonContent, PopoverController, ToastController} from '@ionic/angular';
 import {OptionsComponent} from './components/option-component/options.component';
 import {PhotoService} from '../../services/photo.service';
 import {ViewPhotoComponent} from './components/view-photo/view-photo.component';
 import {FileService} from '../../services/file.service';
-import { ToastController } from '@ionic/angular';
-
+import {VoiceRecordService} from '../../services/voice-record.service';
+import {Howl, Howler} from 'howler';
 
 @Component({
   selector: 'app-main',
@@ -19,8 +19,11 @@ export class MainPage implements OnInit {
   public newMsg = '';
   public editMode = false;
   public loadingForFile = false;
+  public listenMessage: string;
   private updateMessage: Message;
   private photo = '';
+  private recordVoiceMessage: any;
+  private sound;
 
   constructor(private chatService: ChatService,
               public actionSheetController: ActionSheetController,
@@ -28,6 +31,7 @@ export class MainPage implements OnInit {
               private photoService: PhotoService,
               private fileService: FileService,
               private toastController: ToastController,
+              private voiceRecordService: VoiceRecordService
   ) {
   }
 
@@ -36,7 +40,7 @@ export class MainPage implements OnInit {
   }
 
   public sendMessage() {
-    this.chatService.addChatMessage(this.newMsg, this.photo).then(() => {
+    this.chatService.addChatMessage(this.newMsg, this.photo, '', this.recordVoiceMessage).then((data) => {
       this.newMsg = '';
     });
   }
@@ -51,7 +55,7 @@ export class MainPage implements OnInit {
     await popover.present();
 
     await popover.onDidDismiss().then(data => {
-      switch (data.role){
+      switch (data.role) {
         case 'delete':
           this.deleteMessageAndUpdate(data);
           break;
@@ -81,13 +85,13 @@ export class MainPage implements OnInit {
           text: 'Voice Message',
           icon: 'mic',
           handler: () => {
+            this.recordNewMessage();
           }
         },
         {
           text: 'Send File',
           icon: 'document',
           handler: () => {
-            console.log('Send File clicked');
             this.fileService.fileSelected();
           }
         },
@@ -123,7 +127,7 @@ export class MainPage implements OnInit {
     this.editMode = false;
   }
 
-  public async openPhoto(ev: any,  photo: string): Promise<void> {
+  public async openPhoto(ev: any, photo: string): Promise<void> {
     ev.stopImmediatePropagation();
 
     const popover = await this.popoverController.create({
@@ -161,9 +165,52 @@ export class MainPage implements OnInit {
     await toast.present();
   }
 
+  public listenVoiceMessage(message: Message, event) {
+    event.stopImmediatePropagation();
+
+
+    if (!this.sound){
+      this.listenMessage = message.id;
+      this.sound = new Howl({
+        src: [message.voiceMessage.recordDataBase64],
+        onend: () => {
+          console.log();
+          this.listenMessage = undefined;
+        },
+      });
+      this.sound.play();
+    }
+    else if(this.sound.playing()){
+      this.sound.unload();
+
+      this.listenMessage = undefined;
+      this.listenMessage = message.id;
+      this.sound = new Howl({
+        src: [message.voiceMessage.recordDataBase64],
+        onend: () => {
+          console.log();
+          this.listenMessage = undefined;
+        },
+      });
+      this.sound.play();
+    }
+    else {
+      this.listenMessage = message.id;
+      this.sound.play();
+    }
+
+  }
+
+  public pauseVoiceMessage(event) {
+    event.stopImmediatePropagation();
+    this.sound.pause();
+    this.listenMessage = undefined;
+  }
+
   private getAllMessage(): void {
     this.chatService.getChatMessages()
       .subscribe(msg => {
+        console.log(msg);
         if (!this.messages) {
           this.messages = msg;
         } else {
@@ -195,6 +242,13 @@ export class MainPage implements OnInit {
   private addPhotoToGallery() {
     this.photoService.addNewToGallery().then(data => {
       this.photo = data.data;
+      this.sendMessage();
+    });
+  }
+
+  private recordNewMessage() {
+    this.voiceRecordService.startRecord().then(recMes => {
+      this.recordVoiceMessage = recMes.data;
       this.sendMessage();
     });
   }
