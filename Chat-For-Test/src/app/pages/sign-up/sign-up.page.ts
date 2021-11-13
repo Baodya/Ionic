@@ -78,6 +78,11 @@ export class SignUpPage implements OnInit {
   }
 
   loadPhotoFromAvatar() {
-    // this.photoService.fileSelectedForAvatar().then(data => console.log(data))
+    this.photoService.fileSelectedForAvatar();
+    this.photoService.photoForAvatar.subscribe({
+      next: data => {
+        this.credentialForm.get('photo').setValue(data);
+      }
+    });
   }
 }

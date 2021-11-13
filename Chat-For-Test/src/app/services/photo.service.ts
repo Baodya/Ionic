@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Camera, CameraPhoto, CameraResultType, CameraSource} from '@capacitor/camera';
-import {Directory, Encoding, Filesystem} from '@capacitor/filesystem';
+import {Directory} from '@capacitor/filesystem';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
+  public photoForAvatar = new Subject();
 
   constructor() {}
 
@@ -45,5 +47,30 @@ export class PhotoService {
     };
     reader.readAsDataURL(blob);
   });
+
+  public fileSelectedForAvatar() {
+    let fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.addEventListener('change', event => {
+      const target = event.target as HTMLInputElement;
+      const selectedFile = target.files[0];
+      if (selectedFile.type === 'image/png' || selectedFile.type === 'image/jpeg'){
+        this.fileToBase64(selectedFile);
+      }else {
+        return;
+      }
+      fileInput = null;
+    });
+    fileInput.click();
+  };
+
+  private  fileToBase64(file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      const base64data = reader.result;
+      this.photoForAvatar.next(base64data);
+    };
+  }
 
 }
