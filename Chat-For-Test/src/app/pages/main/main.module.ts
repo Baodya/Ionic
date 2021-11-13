@@ -8,6 +8,7 @@ import {HeaderComponent} from '../../components/header/header.component';
 import {OptionsComponent} from './components/option-component/options.component';
 import { ViewPhotoComponent } from './components/view-photo/view-photo.component';
 import {RecordVoiceComponent} from './components/record-voice/record-voice.component';
+import {SharedMapsComponent} from './components/shared-maps/shared-maps.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,13 @@ import {RecordVoiceComponent} from './components/record-voice/record-voice.compo
     MainPageRoutingModule,
   ],
   providers: [],
-  declarations: [MainPage, HeaderComponent, OptionsComponent, ViewPhotoComponent, RecordVoiceComponent]
+  declarations: [
+    MainPage,
+    HeaderComponent,
+    OptionsComponent,
+    ViewPhotoComponent,
+    RecordVoiceComponent,
+    SharedMapsComponent
+  ]
 })
 export class MainPageModule {}

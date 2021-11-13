@@ -52,6 +52,6 @@ export class FileService {
     firebase.storage()
       .ref()
       .child(`${this.chatService.currentUser.uid}/${selectedFile.name}`)
-      .put(selectedFile).then(() => this.chatService.addChatMessage('', '', selectedFile.name));
+      .put(selectedFile).then(() => this.chatService.addChatMessage('', '', selectedFile.name, '', ''));
   };
 }

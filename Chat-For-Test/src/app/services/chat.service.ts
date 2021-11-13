@@ -17,6 +17,11 @@ export interface VoiceMessage {
   msDuration: number;
 }
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export interface Message {
   createdAt: firebase.firestore.FieldValue;
   id: string;
@@ -27,6 +32,7 @@ export interface Message {
   fromName: string;
   myMsg: boolean;
   file: string;
+  coordinates: Coordinates;
 }
 
 @Injectable({
@@ -69,12 +75,13 @@ export class ChatService {
     return this.afAuth.signOut();
   }
 
-  addChatMessage(msg, photo, file = '', voiceMessage = '') {
+  addChatMessage(msg, photo, file = '', voiceMessage = '', coordinates = '') {
     return this.afs.collection('messages').add({
       file,
       photo,
       msg,
       voiceMessage,
+      coordinates,
       from: this.currentUser.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });

@@ -1,12 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ChatService, Message} from '../../services/chat.service';
+import {ChatService, Coordinates, Message} from '../../services/chat.service';
 import {ActionSheetController, IonContent, PopoverController, ToastController} from '@ionic/angular';
 import {OptionsComponent} from './components/option-component/options.component';
 import {PhotoService} from '../../services/photo.service';
 import {ViewPhotoComponent} from './components/view-photo/view-photo.component';
 import {FileService} from '../../services/file.service';
 import {VoiceRecordService} from '../../services/voice-record.service';
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
+import {LocationService} from '../../services/location.service';
+
 
 @Component({
   selector: 'app-main',
@@ -20,6 +22,8 @@ export class MainPage implements OnInit {
   public editMode = false;
   public loadingForFile = false;
   public listenMessage: string;
+  public coordinates: any;
+
   private updateMessage: Message;
   private photo = '';
   private recordVoiceMessage: any;
@@ -31,7 +35,8 @@ export class MainPage implements OnInit {
               private photoService: PhotoService,
               private fileService: FileService,
               private toastController: ToastController,
-              private voiceRecordService: VoiceRecordService
+              private voiceRecordService: VoiceRecordService,
+              private locationService: LocationService
   ) {
   }
 
@@ -40,8 +45,9 @@ export class MainPage implements OnInit {
   }
 
   public sendMessage() {
-    this.chatService.addChatMessage(this.newMsg, this.photo, '', this.recordVoiceMessage).then((data) => {
+    this.chatService.addChatMessage(this.newMsg, this.photo, '', this.recordVoiceMessage, this.coordinates).then(() => {
       this.newMsg = '';
+      this.coordinates = '';
     });
   }
 
@@ -64,8 +70,6 @@ export class MainPage implements OnInit {
           this.newMsg = data.data.msg;
           this.updateMessage = data.data;
           break;
-        default:
-          console.log('default');
       }
     });
   }
@@ -99,7 +103,7 @@ export class MainPage implements OnInit {
           text: 'Location',
           icon: 'navigate-circle',
           handler: () => {
-            console.log('Voice clicked');
+            this.shareLocation();
           }
         }, {
           text: 'Cancel',
@@ -110,8 +114,7 @@ export class MainPage implements OnInit {
     });
     await actionSheet.present();
 
-    const {role} = await actionSheet.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
+    await actionSheet.onDidDismiss();
   }
 
   public editMessage(): void {
@@ -174,7 +177,6 @@ export class MainPage implements OnInit {
       this.sound = new Howl({
         src: [message.voiceMessage.recordDataBase64],
         onend: () => {
-          console.log();
           this.listenMessage = undefined;
         },
       });
@@ -188,7 +190,6 @@ export class MainPage implements OnInit {
       this.sound = new Howl({
         src: [message.voiceMessage.recordDataBase64],
         onend: () => {
-          console.log();
           this.listenMessage = undefined;
         },
       });
@@ -210,7 +211,6 @@ export class MainPage implements OnInit {
   private getAllMessage(): void {
     this.chatService.getChatMessages()
       .subscribe(msg => {
-        console.log(msg);
         if (!this.messages) {
           this.messages = msg;
         } else {
@@ -251,5 +251,20 @@ export class MainPage implements OnInit {
       this.recordVoiceMessage = recMes.data;
       this.sendMessage();
     });
+  }
+
+  private shareLocation() {
+    this.locationService.getCurrentlyLocation().then(res => {
+      this.coordinates = {
+        lat: res.data.latitude,
+        lng: res.data.longitude,
+      };
+      this.sendMessage();
+    });
+  }
+
+  private openLocation(coordinates: Coordinates, $event: any) {
+    $event.stopImmediatePropagation();
+    this.locationService.showLocation(coordinates);
   }
 }
