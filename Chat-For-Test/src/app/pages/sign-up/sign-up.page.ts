@@ -20,7 +20,6 @@ export class SignUpPage implements OnInit {
     private chatService: ChatService,
     private router: Router,
     private photoService: PhotoService,
-    private fileService: FileService,
   ) { }
 
   ngOnInit() {
@@ -65,6 +64,11 @@ export class SignUpPage implements OnInit {
 
   get nickname() {
     return this.credentialForm.get('nickname');
+  }
+
+  get photo() {
+    console.log(this.credentialForm.get('photo'));
+    return this.credentialForm.get('photo');
   }
 
   signIn() {

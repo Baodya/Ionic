@@ -55,23 +55,29 @@
         </div>
       </div>
 
-      <ion-fab vertical="center" horizontal="center" slot="fixed">
-        <ion-fab-button color="tertiary">
-          <ion-icon name="image-outline"></ion-icon>
-        </ion-fab-button>
+      <div class="image">
+        <ion-avatar class="image-show" horizontal="center">
+          <img  [src]="photo.value? photo.value: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y' ">
+        </ion-avatar>
+
+        <ion-fab vertical="center" horizontal="center" slot="fixed">
+          <ion-fab-button color="tertiary">
+            <ion-icon name="image-outline"></ion-icon>
+          </ion-fab-button>
 
 
-        <ion-fab-list side="start">
-          <ion-fab-button color="success">
-            <ion-icon name="cloud-download-outline" (click)="loadPhotoFromAvatar()"></ion-icon>
-          </ion-fab-button>
-        </ion-fab-list>
-        <ion-fab-list side="end">
-          <ion-fab-button color="warning" (click)="addPhotoForAvatar()">
-            <ion-icon name="camera-outline"></ion-icon>
-          </ion-fab-button>
-        </ion-fab-list>
-      </ion-fab>
+          <ion-fab-list side="start">
+            <ion-fab-button color="success">
+              <ion-icon name="cloud-download-outline" (click)="loadPhotoFromAvatar()"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
+          <ion-fab-list side="end">
+            <ion-fab-button color="warning" (click)="addPhotoForAvatar()">
+              <ion-icon name="camera-outline"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
+        </ion-fab>
+      </div>
 
 
     </form>

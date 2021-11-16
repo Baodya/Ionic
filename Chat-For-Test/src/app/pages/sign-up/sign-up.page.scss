@@ -13,4 +13,13 @@
   .field{
     margin-bottom: 20px;
   }
+
+  .image{
+    display: flex;
+    justify-content: center;
+    &_show{
+      width: 100px;
+    }
+  }
+
 }
