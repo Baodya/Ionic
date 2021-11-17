@@ -4,36 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import  firebase from 'firebase/app';
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-
-export interface User {
-  uid: string;
-  email: string;
-  photo?: string;
-  nickname?: string;
-}
-export interface VoiceMessage {
-  mimeType: string;
-  recordDataBase64: string;
-  msDuration: number;
-}
-
-export interface Coordinates {
-  lat: number;
-  lng: number;
-}
-
-export interface Message {
-  createdAt: firebase.firestore.FieldValue;
-  id: string;
-  from: string;
-  msg: string;
-  photo: string;
-  voiceMessage: VoiceMessage;
-  fromName: string;
-  myMsg: boolean;
-  file: string;
-  coordinates: Coordinates;
-}
+import {Message, User} from './interface';
 
 @Injectable({
   providedIn: 'root'
@@ -121,12 +92,7 @@ export class ChatService {
   }
 
   public updateMessage(newMessage): Promise<void> {
-    const data = Object.assign({
-      createdAt: newMessage.createdAt,
-      from: newMessage.from,
-      msg: newMessage.msg
-    });
-    return this.afs.collection('messages').doc(newMessage.id).update(data);
+    return this.afs.collection('messages').doc(newMessage.id).update(newMessage);
   }
 
 }

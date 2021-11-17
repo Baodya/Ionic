@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {ChatService} from '../../services/chat.service';
 import {Router} from '@angular/router';
 import {PhotoService} from '../../services/photo.service';
-import {FileService} from '../../services/file.service';
 
 @Component({
   selector: 'app-login',
@@ -31,13 +30,13 @@ export class SignUpPage implements OnInit {
     });
   }
 
-  async signUp() {
+  async signUp(): Promise<void>{
     const loading = await this.loadingController.create();
     await loading.present();
     this.chatService
       .signUp(this.credentialForm.value)
       .then(
-        (user) => {
+        () => {
           loading.dismiss();
           this.router.navigateByUrl('/main', { replaceUrl: true });
         },
@@ -67,21 +66,20 @@ export class SignUpPage implements OnInit {
   }
 
   get photo() {
-    console.log(this.credentialForm.get('photo'));
     return this.credentialForm.get('photo');
   }
 
-  signIn() {
+  signIn(): void {
     this.router.navigate(['/sign-in']);
   }
 
-  addPhotoForAvatar() {
+  addPhotoForAvatar(): void {
     this.photoService.addNewToGallery().then(data => {
       this.credentialForm.get('photo').setValue(data.data);
     });
   }
 
-  loadPhotoFromAvatar() {
+  loadPhotoFromAvatar(): void {
     this.photoService.fileSelectedForAvatar();
     this.photoService.photoForAvatar.subscribe({
       next: data => {

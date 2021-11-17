@@ -25,7 +25,7 @@ export class RecordVoiceComponent implements OnInit {
     this.recordingStatus = StatusRecord.ready;
   }
 
-  public recordVoice() {
+  public recordVoice(): void {
       VoiceRecorder.startRecording()
         .then(() => {
           this.recordingStatus = StatusRecord.recording;
@@ -37,7 +37,7 @@ export class RecordVoiceComponent implements OnInit {
         });
   }
 
-  public pauseRecord() {
+  public pauseRecord(): void {
     VoiceRecorder.pauseRecording()
       .then(() => {
         this.getStatusRecording();
@@ -46,7 +46,7 @@ export class RecordVoiceComponent implements OnInit {
       });
   }
 
-  public saveRecord() {
+  public saveRecord(): void {
     VoiceRecorder.stopRecording()
       .then((result: RecordingData) => {
         this.getStatusRecording();
@@ -56,11 +56,11 @@ export class RecordVoiceComponent implements OnInit {
       });
   }
 
-  public closeModal(data, role?: string) {
-    this.popoverController.dismiss(data, role).then();
+  public closeModal(data, role?: string): void {
+    this.popoverController.dismiss('', role).then();
   }
 
-  private resumeRecord() {
+  private resumeRecord(): void {
     VoiceRecorder.resumeRecording()
       .then(() => {
         this.getStatusRecording();
@@ -69,7 +69,7 @@ export class RecordVoiceComponent implements OnInit {
       });
   }
 
-  private getStatusRecording() {
+  private getStatusRecording(): void {
     VoiceRecorder.getCurrentStatus()
       .then((result: CurrentRecordingStatus) => {
         switch (result.status) {

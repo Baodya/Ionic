@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ChatService, Coordinates, Message} from '../../services/chat.service';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChatService} from '../../services/chat.service';
 import {ActionSheetController, IonContent, PopoverController, ToastController} from '@ionic/angular';
 import {OptionsComponent} from './components/option-component/options.component';
 import {PhotoService} from '../../services/photo.service';
@@ -8,6 +8,9 @@ import {FileService} from '../../services/file.service';
 import {VoiceRecordService} from '../../services/voice-record.service';
 import {Howl} from 'howler';
 import {LocationService} from '../../services/location.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {Coordinates, Message} from "../../services/interface";
 
 
 @Component({
@@ -15,7 +18,8 @@ import {LocationService} from '../../services/location.service';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
 })
-export class MainPage implements OnInit {
+export class MainPage implements OnInit, OnDestroy {
+
   @ViewChild(IonContent) content: IonContent;
   public messages: Message[];
   public newMsg = '';
@@ -28,6 +32,7 @@ export class MainPage implements OnInit {
   private photo = '';
   private recordVoiceMessage: any;
   private sound;
+  private destroy$ = new Subject();
 
   constructor(private chatService: ChatService,
               public actionSheetController: ActionSheetController,
@@ -43,15 +48,21 @@ export class MainPage implements OnInit {
   ngOnInit() {
     this.getAllMessage();
   }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 
-  public sendMessage() {
+  public sendMessage(): void {
     this.chatService.addChatMessage(this.newMsg, this.photo, '', this.recordVoiceMessage, this.coordinates).then(() => {
       this.newMsg = '';
       this.coordinates = '';
+      this.photo = '';
+      this.recordVoiceMessage = '';
     });
   }
 
-  async presentOption(ev: any, message: Message) {
+  public async presentOption(ev: any, message: Message) {
     const popover = await this.popoverController.create({
       component: OptionsComponent,
       componentProps: {message},
@@ -63,7 +74,15 @@ export class MainPage implements OnInit {
     await popover.onDidDismiss().then(data => {
       switch (data.role) {
         case 'delete':
-          this.deleteMessageAndUpdate(data);
+          this.chatService.deleteMessage(data.data).then(() => {
+            if (data.data.file) {
+              this.fileService.deleteFile(data.data);
+            }
+            const index = this.messages.indexOf(data.data);
+            if (index > -1) {
+              this.messages.splice(index, 1);
+            }
+          });
           break;
         case 'edit':
           this.editMode = true;
@@ -74,7 +93,7 @@ export class MainPage implements OnInit {
     });
   }
 
-  async presentActionSheet() {
+  public async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Option Message',
       buttons: [
@@ -130,13 +149,13 @@ export class MainPage implements OnInit {
     this.editMode = false;
   }
 
-  public async openPhoto(ev: any, photo: string): Promise<void> {
+  public async openPhoto(ev: any, photo: string) {
     ev.stopImmediatePropagation();
 
     const popover = await this.popoverController.create({
       component: ViewPhotoComponent,
       componentProps: {photo},
-      cssClass: 'my-custom-class',
+      cssClass: 'open-photo',
       translucent: true,
     });
     await popover.present();
@@ -144,7 +163,7 @@ export class MainPage implements OnInit {
     await popover.onDidDismiss();
   }
 
-  public downloadFile(message: Message, event) {
+  public downloadFile(message: Message, event): void {
     event.stopImmediatePropagation();
     this.loadingForFile = true;
     this.fileService.downloadFile(message).then(url => this.fileService.downloadFileIntoDevice(url))
@@ -157,7 +176,7 @@ export class MainPage implements OnInit {
       });
   }
 
-  async showToast(text: string) {
+  private async showToast(text: string): Promise<void> {
     const toast = await this.toastController.create({
       color: 'primary',
       duration: 2000,
@@ -168,7 +187,7 @@ export class MainPage implements OnInit {
     await toast.present();
   }
 
-  public listenVoiceMessage(message: Message, event) {
+  public listenVoiceMessage(message: Message, event): void {
     event.stopImmediatePropagation();
 
 
@@ -177,7 +196,7 @@ export class MainPage implements OnInit {
       this.sound = new Howl({
         src: [message.voiceMessage.recordDataBase64],
         onend: () => {
-          this.listenMessage = undefined;
+          this.listenMessage = null;
         },
       });
       this.sound.play();
@@ -185,12 +204,12 @@ export class MainPage implements OnInit {
     else if(this.sound.playing()){
       this.sound.unload();
 
-      this.listenMessage = undefined;
+      this.listenMessage = null;
       this.listenMessage = message.id;
       this.sound = new Howl({
         src: [message.voiceMessage.recordDataBase64],
         onend: () => {
-          this.listenMessage = undefined;
+          this.listenMessage = null;
         },
       });
       this.sound.play();
@@ -202,23 +221,23 @@ export class MainPage implements OnInit {
 
   }
 
-  public pauseVoiceMessage(event) {
+  public pauseVoiceMessage(event): void {
     event.stopImmediatePropagation();
     this.sound.pause();
-    this.listenMessage = undefined;
+    this.listenMessage = null;
   }
 
   private getAllMessage(): void {
-    this.chatService.getChatMessages()
+    this.chatService.getChatMessages().pipe(takeUntil(this.destroy$))
       .subscribe(msg => {
         if (!this.messages) {
           this.messages = msg;
         } else {
-          msg.forEach(upadatedItem => {
-            if (upadatedItem.createdAt !== null) {
-              const messageFound = this.messages.filter(oldItem => upadatedItem.id === oldItem.id);
+          msg.forEach(updatedItem => {
+            if (updatedItem.createdAt !== null) {
+              const messageFound = this.messages.filter(oldItem => updatedItem.id === oldItem.id);
               if (!messageFound.length) {
-                this.messages.push(upadatedItem);
+                this.messages.push(updatedItem);
               }
             }
           });
@@ -229,31 +248,24 @@ export class MainPage implements OnInit {
       });
   }
 
-  private deleteMessageAndUpdate(deleteMessage): void {
-    this.chatService.getChatMessages()
-      .subscribe(() => {
-        const index = this.messages.indexOf(deleteMessage.data);
-        if (index > -1) {
-          this.messages.splice(index, 1);
-        }
-      });
-  }
-
-  private addPhotoToGallery() {
+  private addPhotoToGallery(): void {
     this.photoService.addNewToGallery().then(data => {
       this.photo = data.data;
       this.sendMessage();
     });
   }
 
-  private recordNewMessage() {
+  private recordNewMessage(): void {
     this.voiceRecordService.startRecord().then(recMes => {
-      this.recordVoiceMessage = recMes.data;
-      this.sendMessage();
+      if (recMes.data){
+        this.recordVoiceMessage = recMes.data;
+        this.sendMessage();
+      }
+      return;
     });
   }
 
-  private shareLocation() {
+  private shareLocation(): void {
     this.locationService.getCurrentlyLocation().then(res => {
       this.coordinates = {
         lat: res.data.latitude,
@@ -263,7 +275,7 @@ export class MainPage implements OnInit {
     });
   }
 
-  private openLocation(coordinates: Coordinates, $event: any) {
+  private openLocation(coordinates: Coordinates, $event: any): void {
     $event.stopImmediatePropagation();
     this.locationService.showLocation(coordinates);
   }

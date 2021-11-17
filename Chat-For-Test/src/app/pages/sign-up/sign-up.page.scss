@@ -6,7 +6,7 @@
 }
 .content{
   height: 88vh;
-  display: flex !important;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
 
@@ -17,9 +17,6 @@
   .image{
     display: flex;
     justify-content: center;
-    &_show{
-      width: 100px;
-    }
   }
 
 }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import firebase from 'firebase/app';
-import {ChatService, Message} from './chat.service';
+import {ChatService} from './chat.service';
+import {Message} from './interface';
 
 
 @Injectable({
@@ -22,7 +23,7 @@ export class FileService {
       .delete().then();
   }
 
-  public fileSelected() {
+  public fileSelected(): void {
     let fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.addEventListener('change', event => {
@@ -34,17 +35,16 @@ export class FileService {
     fileInput.click();
   };
 
-  public downloadFile(message: Message): Promise<void> {
+  public downloadFile(message: Message): Promise<string> {
     return firebase.storage()
       .ref(`${message.from}/${message.file}`)
       .getDownloadURL();
 
   }
 
-  public downloadFileIntoDevice(urlForDownload) {
+  public downloadFileIntoDevice(urlForDownload): void {
     const a = document.createElement('a');
     a.href = urlForDownload;
-    a.setAttribute('download', 'test.txt');
     a.click();
   }
 

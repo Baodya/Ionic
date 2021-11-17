@@ -28,6 +28,7 @@ ion-menu-button {
 }
 
 .message-input {
+  overflow: hidden;
   width: 100%;
   border: 1px solid var(--ion-color-medium);
   border-radius: 6px;
@@ -38,9 +39,9 @@ ion-menu-button {
 }
 
 .message {
-  padding: 10px !important;
-  border-radius: 10px !important;
-  margin-bottom: 4px !important;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 4px;
   white-space: pre-wrap;
 
   .image{
@@ -63,6 +64,5 @@ ion-menu-button {
 
 .time {
   color: #dfdfdf;
-  float: right;
   font-size: small;
 }

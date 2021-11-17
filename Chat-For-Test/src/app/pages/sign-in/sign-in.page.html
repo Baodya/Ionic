@@ -40,7 +40,7 @@
     </form>
 
     <div >
-      <ion-button (click)="signIn()" strong="true" expand="block" color="success">Sign in</ion-button>
+      <ion-button (click)="signIn()" [disabled]="credentialForm.invalid" strong="true" expand="block" color="success">Sign in</ion-button>
     </div>
   </div>
 </ion-content>

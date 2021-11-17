@@ -4,7 +4,7 @@ import {PopoverController} from '@ionic/angular';
 @Component({
   selector: 'app-view-photo',
   templateUrl: './view-photo.component.html',
-  styleUrls: ['./view-photo.component.css']
+  styleUrls: ['./view-photo.component.scss']
 })
 export class ViewPhotoComponent implements OnInit {
   public currentPhoto;

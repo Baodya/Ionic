@@ -26,7 +26,7 @@ export class SignInPage implements OnInit {
     });
   }
 
-  async signIn() {
+  async signIn(): Promise<void> {
     const loading = await this.loadingController.create();
     await loading.present();
 

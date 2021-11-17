@@ -3,7 +3,7 @@
     <ion-title>Sign Up</ion-title>
     <ion-button strong="true" (click)="signIn()" slot="end" color="success">
       <ion-icon name="arrow-back-circle-sharp"></ion-icon>
-       Sign in
+      Sign in
     </ion-button>
 
   </ion-toolbar>
@@ -56,9 +56,12 @@
       </div>
 
       <div class="image">
-        <ion-avatar class="image-show" horizontal="center">
-          <img  [src]="photo.value? photo.value: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y' ">
+
+        <ion-avatar>
+          <img
+            [src]="photo.value? photo.value: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y' ">
         </ion-avatar>
+
 
         <ion-fab vertical="center" horizontal="center" slot="fixed">
           <ion-fab-button color="tertiary">
@@ -67,8 +70,8 @@
 
 
           <ion-fab-list side="start">
-            <ion-fab-button color="success">
-              <ion-icon name="cloud-download-outline" (click)="loadPhotoFromAvatar()"></ion-icon>
+            <ion-fab-button color="success" (click)="loadPhotoFromAvatar()">
+              <ion-icon name="cloud-download-outline"></ion-icon>
             </ion-fab-button>
           </ion-fab-list>
           <ion-fab-list side="end">
@@ -83,7 +86,9 @@
     </form>
 
     <div>
-      <ion-button strong="true" expand="block" (click)="signUp()" color="warning">Sign up</ion-button>
+      <ion-button strong="true" expand="block" [disabled]="credentialForm.invalid" (click)="signUp()" color="warning">
+        Sign up
+      </ion-button>
     </div>
   </div>
 </ion-content>

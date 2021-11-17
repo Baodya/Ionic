@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {PopoverController} from '@ionic/angular';
 import {SharedMapsComponent} from '../pages/main/components/shared-maps/shared-maps.component';
-import {Coordinates} from './chat.service';
+import {Coordinates} from './interface';
 
 
 @Injectable({
