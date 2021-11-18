@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Chat-For-Test",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
