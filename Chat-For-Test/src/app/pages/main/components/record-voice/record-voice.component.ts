@@ -57,7 +57,7 @@ export class RecordVoiceComponent implements OnInit {
   }
 
   public closeModal(data, role?: string): void {
-    this.popoverController.dismiss('', role).then();
+    this.popoverController.dismiss(data, role).then();
   }
 
   private resumeRecord(): void {

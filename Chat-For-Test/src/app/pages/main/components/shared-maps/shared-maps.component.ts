@@ -15,12 +15,14 @@ export class SharedMapsComponent implements OnInit {
   @ViewChild('map') divForMap: ElementRef;
   public map: any;
   public coordinates;
+  public showButton = true;
   constructor(public popoverController: PopoverController) {}
 
   ngOnInit(): void {
     this.popoverController.getTop().then(data => {
       const componentPropsCoordinates = data.componentProps;
       if (data.componentProps){
+        this.showButton = false;
         this.loadMap(componentPropsCoordinates);
       }else{
         this.startTracing();
@@ -68,11 +70,11 @@ export class SharedMapsComponent implements OnInit {
     this.map.setZoom(5);
   }
 
-  private deleteLocation(): void {
+  public deleteLocation(): void {
     this.popoverController.dismiss(false, 'delete coordinate');
   }
 
-  private sendLocation(): void {
+  public sendLocation(): void {
     this.popoverController.dismiss(this.coordinates, 'Send coordinates');
   }
 }

@@ -10,7 +10,7 @@ import {Howl} from 'howler';
 import {LocationService} from '../../services/location.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {Coordinates, Message} from "../../services/interface";
+import {Coordinates, Message} from '../../services/interface';
 
 
 @Component({
@@ -257,7 +257,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   private recordNewMessage(): void {
     this.voiceRecordService.startRecord().then(recMes => {
-      if (recMes.data){
+      if (recMes.role){
         this.recordVoiceMessage = recMes.data;
         this.sendMessage();
       }
