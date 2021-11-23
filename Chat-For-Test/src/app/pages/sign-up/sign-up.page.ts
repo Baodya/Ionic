@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { ChatService } from '../../services/chat.service';
 import { Router } from '@angular/router';
 import { PhotoService } from '../../services/photo.service';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-login',
   templateUrl: './sign-up.page.html',
   styleUrls: ['./sign-up.page.scss'],
 })
-export class SignUpPage implements OnInit {
+export class SignUpPage implements OnInit, OnDestroy {
   public credentialForm: FormGroup;
+  private destroy$ = new Subject();
 
   constructor(
     private fb: FormBuilder,
@@ -30,6 +33,11 @@ export class SignUpPage implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   async signUp(): Promise<void> {
@@ -83,7 +91,7 @@ export class SignUpPage implements OnInit {
 
   loadPhotoFromAvatar(): void {
     this.photoService.fileSelectedForAvatar();
-    this.photoService.photoForAvatar.subscribe({
+    this.photoService.photoForAvatar.pipe(takeUntil(this.destroy$)).subscribe({
       next: data => {
         this.credentialForm.get('photo').setValue(data);
       }
