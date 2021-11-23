@@ -8,9 +8,9 @@ describe('ViewPhotoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SharedMapsComponent ]
+      declarations: [SharedMapsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

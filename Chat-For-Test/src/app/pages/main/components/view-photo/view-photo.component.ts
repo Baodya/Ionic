@@ -8,6 +8,7 @@ import { PopoverController } from '@ionic/angular';
 })
 export class ViewPhotoComponent {
   public currentPhoto;
+
   constructor(public popoverController: PopoverController) {
     this.popoverController.getTop().then(data => {
       this.currentPhoto = data.componentProps.photo;

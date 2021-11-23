@@ -8,23 +8,24 @@ import { Coordinates } from './interfaces';
   providedIn: 'root'
 })
 export class LocationService {
-  constructor( public popoverController: PopoverController) {}
+  constructor(public popoverController: PopoverController) {
+  }
 
   public async getCurrentlyLocation(): Promise<any | void> {
-      const popover = await this.popoverController.create({
-        component: SharedMapsComponent,
-        translucent: true,
-      });
-      await popover.present();
+    const popover = await this.popoverController.create({
+      component: SharedMapsComponent,
+      translucent: true,
+    });
+    await popover.present();
 
-      return await popover.onDidDismiss().then(data => {
-        switch (data.role) {
-          case 'Send coordinates':
-            return data;
-          default:
-            return ;
-        }
-      });
+    return await popover.onDidDismiss().then(data => {
+      switch (data.role) {
+        case 'Send coordinates':
+          return data;
+        default:
+          return;
+      }
+    });
   }
 
 
@@ -41,7 +42,7 @@ export class LocationService {
         case 'Send coordinates':
           return data;
         default:
-          return ;
+          return;
       }
     });
   }

@@ -18,23 +18,25 @@ export class RecordVoiceComponent implements OnInit {
   public recordingStatus: StatusRecord;
   public record = false;
   public canSave = true;
+
   constructor(public popoverController: PopoverController,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.recordingStatus = StatusRecord.ready;
   }
 
   public recordVoice(): void {
-      VoiceRecorder.startRecording()
-        .then(() => {
-          this.recordingStatus = StatusRecord.recording;
-          this.record = true;
-          this.canSave = true;
-        })
-        .catch(() => {
-          this.resumeRecord();
-        });
+    VoiceRecorder.startRecording()
+      .then(() => {
+        this.recordingStatus = StatusRecord.recording;
+        this.record = true;
+        this.canSave = true;
+      })
+      .catch(() => {
+        this.resumeRecord();
+      });
   }
 
   public pauseRecord(): void {

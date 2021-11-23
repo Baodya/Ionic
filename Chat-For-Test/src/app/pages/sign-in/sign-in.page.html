@@ -33,14 +33,16 @@
           clearInput="true">
         </ion-input>
       </ion-item>
-      <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors" >
+      <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
         <span *ngIf="password.errors?.required"> Password is required </span>
         <span *ngIf="password.errors?.minlength"> Password needs to be 6 characters</span>
       </div>
     </form>
 
-    <div >
-      <ion-button (click)="signIn()" [disabled]="credentialForm.invalid" strong="true" expand="block" color="success">Sign in</ion-button>
+    <div>
+      <ion-button (click)="signIn()" [disabled]="credentialForm.invalid" strong="true" expand="block" color="success">
+        Sign in
+      </ion-button>
     </div>
   </div>
 </ion-content>

@@ -1,8 +1,9 @@
 <ion-header>
-  <ion-toolbar >
+  <ion-toolbar>
     <div class="flex">
       <ion-avatar>
-        <img [src]="currentUser? currentUser.photo: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y' ">
+        <img
+          [src]="currentUser? currentUser.photo: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y' ">
 
       </ion-avatar>
       <ion-title>{{currentUser?.nickname}}</ion-title>
@@ -11,7 +12,7 @@
       <ion-button fill="clear" (click)="signOut()">
         <ion-icon name="log-out" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-toggle  (click)="chatService.dark = !chatService.dark"></ion-toggle>
+      <ion-toggle (click)="chatService.dark = !chatService.dark"></ion-toggle>
 
     </ion-buttons>
   </ion-toolbar>

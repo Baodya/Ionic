@@ -16,15 +16,17 @@ export class SharedMapsComponent implements OnInit {
   public map: any;
   public coordinates;
   public showButton = true;
-  constructor(public popoverController: PopoverController) {}
+
+  constructor(public popoverController: PopoverController) {
+  }
 
   ngOnInit(): void {
     this.popoverController.getTop().then(data => {
       this.coordinates = data.componentProps;
-      if (data.componentProps){
+      if (data.componentProps) {
         this.showButton = false;
         this.loadMap(this.coordinates);
-      }else{
+      } else {
         this.startTracing().then(() => {
           this.loadMap(this.coordinates);
 
@@ -37,7 +39,7 @@ export class SharedMapsComponent implements OnInit {
     await Geolocation.getCurrentPosition().then((position) => {
       this.coordinates = position.coords;
       this.loadMap(position.coords);
-      if(position) {
+      if (position) {
         this.addNewLocation(
           position.coords.latitude,
           position.coords.longitude,
@@ -50,8 +52,8 @@ export class SharedMapsComponent implements OnInit {
   private loadMap(coordinates?): void {
     let latLng;
     if (coordinates.lat) {
-        latLng = new google.maps.LatLng(coordinates.lat, coordinates.lng);
-    }else{
+      latLng = new google.maps.LatLng(coordinates.lat, coordinates.lng);
+    } else {
       latLng = new google.maps.LatLng(coordinates.latitude, coordinates.longitude);
     }
 

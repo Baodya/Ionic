@@ -10,7 +10,8 @@ import { Photos } from './interfaces';
 export class PhotoService {
   public photoForAvatar = new Subject();
 
-  constructor() {}
+  constructor() {
+  }
 
   public async addNewToGallery(): Promise<Photos> {
     const capturedPhoto = await Camera.getPhoto({
@@ -55,9 +56,9 @@ export class PhotoService {
     fileInput.addEventListener('change', event => {
       const target = event.target as HTMLInputElement;
       const selectedFile = target.files[0];
-      if (selectedFile.type === 'image/png' || selectedFile.type === 'image/jpeg'){
+      if (selectedFile.type === 'image/png' || selectedFile.type === 'image/jpeg') {
         this.fileToBase64(selectedFile);
-      }else {
+      } else {
         return;
       }
       fileInput = null;
@@ -65,7 +66,7 @@ export class PhotoService {
     fileInput.click();
   };
 
-  private  fileToBase64(file): void {
+  private fileToBase64(file): void {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {

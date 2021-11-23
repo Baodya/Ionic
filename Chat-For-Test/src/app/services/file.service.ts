@@ -16,7 +16,7 @@ export class FileService {
   }
 
 
-  public deleteFile(currentMessage): void{
+  public deleteFile(currentMessage): void {
     firebase.storage()
       .ref()
       .child(`${currentMessage.from}/${currentMessage.file}`)

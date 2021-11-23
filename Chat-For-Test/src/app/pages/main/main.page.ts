@@ -14,7 +14,6 @@ import { Coordinates, Message } from '../../services/interfaces';
 
 
 @Component({
-  selector: 'app-main',
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
 })
@@ -42,11 +41,13 @@ export class MainPage implements OnInit, OnDestroy {
               private toastController: ToastController,
               private voiceRecordService: VoiceRecordService,
               private locationService: LocationService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.getAllMessage();
   }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
@@ -189,8 +190,7 @@ export class MainPage implements OnInit, OnDestroy {
   public listenVoiceMessage(message: Message, event): void {
     event.stopImmediatePropagation();
 
-
-    if (!this.sound){
+    if (!this.sound) {
       this.listenMessage = message.id;
       this.sound = new Howl({
         src: [message.voiceMessage.recordDataBase64],
@@ -199,11 +199,8 @@ export class MainPage implements OnInit, OnDestroy {
         },
       });
       this.sound.play();
-    }
-    else if(this.sound.playing()){
+    } else if (this.sound.playing()) {
       this.sound.unload();
-
-      this.listenMessage = null;
       this.listenMessage = message.id;
       this.sound = new Howl({
         src: [message.voiceMessage.recordDataBase64],
@@ -212,8 +209,7 @@ export class MainPage implements OnInit, OnDestroy {
         },
       });
       this.sound.play();
-    }
-    else {
+    } else {
       this.listenMessage = message.id;
       this.sound.play();
     }
@@ -256,7 +252,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   private recordNewMessage(): void {
     this.voiceRecordService.startRecord().then(recMes => {
-      if (recMes.role){
+      if (recMes.role) {
         this.recordVoiceMessage = recMes.data;
         this.sendMessage();
       }

@@ -8,6 +8,7 @@ import { PopoverController } from '@ionic/angular';
 })
 export class OptionsComponent {
   public currentMessage;
+
   constructor(public popoverController: PopoverController,
   ) {
     this.popoverController.getTop().then(data => {

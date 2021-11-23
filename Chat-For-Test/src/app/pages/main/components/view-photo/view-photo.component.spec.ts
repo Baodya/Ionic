@@ -8,9 +8,9 @@ describe('ViewPhotoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewPhotoComponent ]
+      declarations: [ViewPhotoComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

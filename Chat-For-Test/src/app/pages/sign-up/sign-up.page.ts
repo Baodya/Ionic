@@ -12,6 +12,7 @@ import { PhotoService } from '../../services/photo.service';
 })
 export class SignUpPage implements OnInit {
   public credentialForm: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
@@ -19,7 +20,8 @@ export class SignUpPage implements OnInit {
     private chatService: ChatService,
     private router: Router,
     private photoService: PhotoService,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.credentialForm = this.fb.group({
@@ -30,7 +32,7 @@ export class SignUpPage implements OnInit {
     });
   }
 
-  async signUp(): Promise<void>{
+  async signUp(): Promise<void> {
     const loading = await this.loadingController.create();
     await loading.present();
     this.chatService
@@ -38,7 +40,7 @@ export class SignUpPage implements OnInit {
       .then(
         () => {
           loading.dismiss();
-          this.router.navigateByUrl('/main', { replaceUrl: true });
+          this.router.navigateByUrl('/main', {replaceUrl: true});
         },
         async (err) => {
           loading.dismiss();

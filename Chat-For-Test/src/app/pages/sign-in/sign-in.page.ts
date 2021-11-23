@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertController, LoadingController} from '@ionic/angular';
-import {ChatService} from '../../services/chat.service';
-import {Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { ChatService } from '../../services/chat.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +11,15 @@ import {Router} from '@angular/router';
 })
 export class SignInPage implements OnInit {
   public credentialForm: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
     private loadingController: LoadingController,
     private chatService: ChatService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.credentialForm = this.fb.group({
@@ -35,7 +37,7 @@ export class SignInPage implements OnInit {
       .then(
         (res) => {
           loading.dismiss();
-          this.router.navigateByUrl('/main', { replaceUrl: true });
+          this.router.navigateByUrl('/main', {replaceUrl: true});
         },
         async (err) => {
           loading.dismiss();

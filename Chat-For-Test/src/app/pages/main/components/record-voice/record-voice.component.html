@@ -1,10 +1,10 @@
-<section >
+<section>
   <ion-row>
     <ion-button size="large" expand="full" color="dark" (click)="closeModal(true)">
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>
 
-    <ion-button *ngIf="!record" size="large" expand="full" color="danger"  (click)="recordVoice()">
+    <ion-button *ngIf="!record" size="large" expand="full" color="danger" (click)="recordVoice()">
       <ion-icon name="play-circle" slot="icon-only"></ion-icon>
     </ion-button>
 
@@ -12,9 +12,9 @@
       <ion-icon name="pause-circle" slot="icon-only"></ion-icon>
     </ion-button>
 
-  <ion-button size="large" expand="full" [disabled]="canSave" color="dark" (click)="saveRecord()">
-    <ion-icon name="save" slot="icon-only"></ion-icon>
-  </ion-button>
+    <ion-button size="large" expand="full" [disabled]="canSave" color="dark" (click)="saveRecord()">
+      <ion-icon name="save" slot="icon-only"></ion-icon>
+    </ion-button>
   </ion-row>
   <ion-item color="success">
     <ion-label>

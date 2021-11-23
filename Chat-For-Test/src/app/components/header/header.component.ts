@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router  } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { User } from '../../services/interfaces';
@@ -14,6 +14,7 @@ import { User } from '../../services/interfaces';
 export class HeaderComponent implements OnInit, OnDestroy {
   public currentUser: User = null;
   private destroy$ = new Subject();
+
   constructor(public chatService: ChatService, private router: Router, private afAuth: AngularFireAuth) {
     this.afAuth.onAuthStateChanged((user) => {
       this.currentUser = user;
@@ -38,7 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private getUsers() {
     this.chatService.getUsers().pipe(takeUntil(this.destroy$)).subscribe({
       next: (user) => {
-        this.currentUser = user.find(( oneUser) => oneUser.uid === this.currentUser.uid);
+        this.currentUser = user.find((oneUser) => oneUser.uid === this.currentUser.uid);
       }
     });
 

@@ -9,7 +9,7 @@ describe('OptionComponentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OptionsComponent ],
+      declarations: [OptionsComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

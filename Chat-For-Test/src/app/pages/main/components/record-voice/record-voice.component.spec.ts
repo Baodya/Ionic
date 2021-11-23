@@ -9,7 +9,7 @@ describe('OptionComponentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecordVoiceComponent ],
+      declarations: [RecordVoiceComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

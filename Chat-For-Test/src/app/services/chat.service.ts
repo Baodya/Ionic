@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import  firebase from 'firebase/app';
-import { switchMap, map } from 'rxjs/operators';
+import firebase from 'firebase/app';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Message, User } from './interfaces';
 
@@ -20,7 +20,7 @@ export class ChatService {
     }).then();
   }
 
-  public async signUp({ email, password, nickname, photo }): Promise<any> {
+  public async signUp({email, password, nickname, photo}): Promise<any> {
     const credential = await this.afAuth.createUserWithEmailAndPassword(
       email,
       password
@@ -38,7 +38,7 @@ export class ChatService {
     });
   }
 
-  public signIn({ email, password }): ReturnType<firebase.auth.Auth['signInWithEmailAndPassword']> {
+  public signIn({email, password}): ReturnType<firebase.auth.Auth['signInWithEmailAndPassword']> {
     return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
@@ -63,7 +63,7 @@ export class ChatService {
     return this.getUsers().pipe(
       switchMap(res => {
         users = res;
-        return this.afs.collection('messages', ref => ref.orderBy('createdAt')).valueChanges({ idField: 'id' }) as Observable<Message[]>;
+        return this.afs.collection('messages', ref => ref.orderBy('createdAt')).valueChanges({idField: 'id'}) as Observable<Message[]>;
       }),
       map(messages => {
         for (const m of messages) {
@@ -74,12 +74,13 @@ export class ChatService {
       })
     );
   }
+
   public deleteMessage(currentMessage): Promise<void> {
     return this.afs.collection('messages').doc(currentMessage.id).delete();
   }
 
   public getUsers(): Observable<User[]> {
-    return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
+    return this.afs.collection('users').valueChanges({idField: 'uid'}) as Observable<User[]>;
   }
 
   private getUserForMsg(msgFromId, users: User[]): string {
