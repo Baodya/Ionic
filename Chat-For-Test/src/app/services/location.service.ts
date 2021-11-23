@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {PopoverController} from '@ionic/angular';
-import {SharedMapsComponent} from '../pages/main/components/shared-maps/shared-maps.component';
-import {Coordinates} from './interface';
+import { Injectable } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
+import { SharedMapsComponent } from '../pages/main/components/shared-maps/shared-maps.component';
+import { Coordinates } from './interfaces';
 
 
 @Injectable({
@@ -10,7 +10,7 @@ import {Coordinates} from './interface';
 export class LocationService {
   constructor( public popoverController: PopoverController) {}
 
-  public async getCurrentlyLocation() {
+  public async getCurrentlyLocation(): Promise<any | void> {
       const popover = await this.popoverController.create({
         component: SharedMapsComponent,
         translucent: true,
@@ -28,7 +28,7 @@ export class LocationService {
   }
 
 
-  async showLocation(coordinates: Coordinates) {
+  public async showLocation(coordinates: Coordinates): Promise<any | void> {
     const popover = await this.popoverController.create({
       component: SharedMapsComponent,
       componentProps: coordinates,

@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Camera, CameraPhoto, CameraResultType, CameraSource} from '@capacitor/camera';
-import {Directory} from '@capacitor/filesystem';
-import {Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Camera, CameraPhoto, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Directory } from '@capacitor/filesystem';
+import { Subject } from 'rxjs';
+import { Photos } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class PhotoService {
 
   constructor() {}
 
-  public async addNewToGallery() {
+  public async addNewToGallery(): Promise<Photos> {
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
@@ -23,7 +24,7 @@ export class PhotoService {
     return await this.savePicture(capturedPhoto);
   }
 
-  private async savePicture(cameraPhoto: CameraPhoto) {
+  private async savePicture(cameraPhoto: CameraPhoto): Promise<Photos> {
     const base64Data = await this.readAsBase64(cameraPhoto);
     const fileName = new Date().getTime() + '.jpeg';
     return {
@@ -33,7 +34,7 @@ export class PhotoService {
     };
   }
 
-  private async readAsBase64(cameraPhoto: CameraPhoto) {
+  private async readAsBase64(cameraPhoto: CameraPhoto): Promise<string> {
     const response = await fetch(cameraPhoto.webPath!);
     const blob = await response.blob();
     return await this.convertBlobToBase64(blob) as string;
@@ -48,7 +49,7 @@ export class PhotoService {
     reader.readAsDataURL(blob);
   });
 
-  public fileSelectedForAvatar() {
+  public fileSelectedForAvatar(): void {
     let fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.addEventListener('change', event => {
@@ -64,7 +65,7 @@ export class PhotoService {
     fileInput.click();
   };
 
-  private  fileToBase64(file) {
+  private  fileToBase64(file): void {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {

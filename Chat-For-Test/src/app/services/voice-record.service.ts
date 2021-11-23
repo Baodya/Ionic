@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {VoiceRecorder} from 'capacitor-voice-recorder';
-import {PopoverController} from '@ionic/angular';
-import {RecordVoiceComponent} from '../pages/main/components/record-voice/record-voice.component';
+import { Injectable } from '@angular/core';
+import { VoiceRecorder } from 'capacitor-voice-recorder';
+import { PopoverController } from '@ionic/angular';
+import { RecordVoiceComponent } from '../pages/main/components/record-voice/record-voice.component';
 
 
 @Injectable({

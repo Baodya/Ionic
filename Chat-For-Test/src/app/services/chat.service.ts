@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import  firebase from 'firebase/app';
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import {Message, User} from './interface';
+import { Message, User } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class ChatService {
     }).then();
   }
 
-  async signUp({ email, password, nickname, photo }): Promise<any> {
+  public async signUp({ email, password, nickname, photo }): Promise<any> {
     const credential = await this.afAuth.createUserWithEmailAndPassword(
       email,
       password
@@ -38,15 +38,15 @@ export class ChatService {
     });
   }
 
-  signIn({ email, password }) {
+  public signIn({ email, password }): ReturnType<firebase.auth.Auth['signInWithEmailAndPassword']> {
     return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  signOut(): Promise<void> {
+  public signOut(): Promise<void> {
     return this.afAuth.signOut();
   }
 
-  addChatMessage(msg, photo, file = '', voiceMessage = '', coordinates = '') {
+  public addChatMessage(msg, photo, file = '', voiceMessage = '', coordinates = ''): Promise<DocumentReference<unknown>> {
     return this.afs.collection('messages').add({
       file,
       photo,
@@ -58,7 +58,7 @@ export class ChatService {
     });
   }
 
-  getChatMessages() {
+  public getChatMessages(): Observable<Message[]> {
     let users = [];
     return this.getUsers().pipe(
       switchMap(res => {
@@ -74,15 +74,15 @@ export class ChatService {
       })
     );
   }
-  public deleteMessage(currentMessage): Promise<any> {
+  public deleteMessage(currentMessage): Promise<void> {
     return this.afs.collection('messages').doc(currentMessage.id).delete();
   }
 
-  public getUsers() {
+  public getUsers(): Observable<User[]> {
     return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
   }
 
-  getUserForMsg(msgFromId, users: User[]): string {
+  private getUserForMsg(msgFromId, users: User[]): string {
     for (const usr of users) {
       if (usr.uid === msgFromId) {
         return usr.nickname;

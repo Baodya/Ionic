@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertController, LoadingController} from '@ionic/angular';
-import {ChatService} from '../../services/chat.service';
-import {Router} from '@angular/router';
-import {PhotoService} from '../../services/photo.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { ChatService } from '../../services/chat.service';
+import { Router } from '@angular/router';
+import { PhotoService } from '../../services/photo.service';
 
 @Component({
   selector: 'app-login',

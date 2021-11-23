@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
-import {ChatService} from './chat.service';
-import {Message} from './interface';
+import { ChatService } from './chat.service';
+import { Message } from './interfaces';
 
 
 @Injectable({

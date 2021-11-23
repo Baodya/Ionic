@@ -1,16 +1,16 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ChatService} from '../../services/chat.service';
-import {ActionSheetController, IonContent, PopoverController, ToastController} from '@ionic/angular';
-import {OptionsComponent} from './components/option-component/options.component';
-import {PhotoService} from '../../services/photo.service';
-import {ViewPhotoComponent} from './components/view-photo/view-photo.component';
-import {FileService} from '../../services/file.service';
-import {VoiceRecordService} from '../../services/voice-record.service';
-import {Howl} from 'howler';
-import {LocationService} from '../../services/location.service';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {Coordinates, Message} from '../../services/interface';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChatService } from '../../services/chat.service';
+import { ActionSheetController, IonContent, PopoverController, ToastController } from '@ionic/angular';
+import { OptionsComponent } from './components/option-component/options.component';
+import { PhotoService } from '../../services/photo.service';
+import { ViewPhotoComponent } from './components/view-photo/view-photo.component';
+import { FileService } from '../../services/file.service';
+import { VoiceRecordService } from '../../services/voice-record.service';
+import { Howl } from 'howler';
+import { LocationService } from '../../services/location.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Coordinates, Message } from '../../services/interfaces';
 
 
 @Component({
@@ -42,13 +42,12 @@ export class MainPage implements OnInit, OnDestroy {
               private toastController: ToastController,
               private voiceRecordService: VoiceRecordService,
               private locationService: LocationService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.getAllMessage();
   }
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
   }
@@ -62,7 +61,7 @@ export class MainPage implements OnInit, OnDestroy {
     });
   }
 
-  public async presentOption(ev: any, message: Message) {
+  public async presentOption(ev: any, message: Message): Promise<void> {
     const popover = await this.popoverController.create({
       component: OptionsComponent,
       componentProps: {message},
@@ -93,7 +92,7 @@ export class MainPage implements OnInit, OnDestroy {
     });
   }
 
-  public async presentActionSheet() {
+  public async presentActionSheet(): Promise<void> {
     const actionSheet = await this.actionSheetController.create({
       header: 'Option Message',
       buttons: [
@@ -149,7 +148,7 @@ export class MainPage implements OnInit, OnDestroy {
     this.editMode = false;
   }
 
-  public async openPhoto(ev: any, photo: string) {
+  public async openPhoto(ev: any, photo: string): Promise<void> {
     ev.stopImmediatePropagation();
 
     const popover = await this.popoverController.create({
@@ -275,7 +274,7 @@ export class MainPage implements OnInit, OnDestroy {
     });
   }
 
-  private openLocation(coordinates: Coordinates, $event: any): void {
+  public openLocation(coordinates: Coordinates, $event): void {
     $event.stopImmediatePropagation();
     this.locationService.showLocation(coordinates);
   }

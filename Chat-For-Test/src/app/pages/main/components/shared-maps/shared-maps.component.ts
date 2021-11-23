@@ -1,6 +1,6 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {PopoverController} from '@ionic/angular';
-import {Geolocation} from '@capacitor/geolocation';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
+import { Geolocation } from '@capacitor/geolocation';
 
 
 declare let google;
@@ -31,9 +31,6 @@ export class SharedMapsComponent implements OnInit {
         });
       }
     });
-
-
-
   }
 
   private async startTracing(): Promise<void> {

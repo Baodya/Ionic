@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { Directory } from '@capacitor/filesystem';
 
 export interface User {
   uid: string;
@@ -6,6 +7,7 @@ export interface User {
   photo?: string;
   nickname?: string;
 }
+
 export interface VoiceMessage {
   mimeType: string;
   recordDataBase64: string;
@@ -28,4 +30,10 @@ export interface Message {
   myMsg: boolean;
   file: string;
   coordinates: Coordinates;
+}
+
+export interface Photos {
+  path: string;
+  data: string;
+  directory: Directory;
 }

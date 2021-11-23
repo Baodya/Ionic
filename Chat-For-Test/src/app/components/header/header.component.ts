@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ChatService} from '../../services/chat.service';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {User} from '../../services/interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChatService } from '../../services/chat.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router  } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { User } from '../../services/interfaces';
 
 @Component({
   selector: 'app-header',

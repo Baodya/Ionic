@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {PopoverController} from '@ionic/angular';
-import {CurrentRecordingStatus, RecordingData, VoiceRecorder} from 'capacitor-voice-recorder';
+import { Component, OnInit } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
+import { CurrentRecordingStatus, RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
 
 export enum StatusRecord {
   ready = 'Ready',
